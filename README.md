@@ -5,7 +5,7 @@ Creates an interface to add and remove a repeatable group of input elements.
 ##Example
 
 ```html
-<form action="echo.php" class="repeater">
+<form class="repeater">
     <div data-repeater-list="group-a">
       <div data-repeater-item>
         <input type="text" name="text-input" value="A"/>
@@ -17,7 +17,6 @@ Creates an interface to add and remove a repeatable group of input elements.
       </div>
     </div>
     <input data-repeater-create type="button" value="Add"/>
-  </div>
 </form>
 
 <script src="path/to/jquery.js"></script>
@@ -34,8 +33,8 @@ Creates an interface to add and remove a repeatable group of input elements.
             },
             // optional
             // called just after an item is added.  The item is hidden at this
-            // point.  If a show callback is not given the item will have $(this).show()
-            // called on it.
+            // point.  If a show callback is not given the item will have
+            // $(this).show() called on it.
             show: function () {
                 $(this).slideDown();
             },
