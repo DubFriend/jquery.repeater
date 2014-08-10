@@ -2,10 +2,28 @@
 
 Creates an interface to add and remove a repeatable group of input elements.
 
+##Templates
+
+Repeater uses the first "data-repeater-item" as a template for added items.
+
+##Rewritten Name Attributes.
+
+Repeater rewrites your name attributes to avoid collisions within the same form.
+(since the name attributes will be repeated).  In the example below, the
+name attributes would be renamed "group-a[0][text-input]" and "group-a[1][text-input]".
+
+Names get reindexed if an item is added or deleted.
+
 ##Example
 
 ```html
 <form class="repeater">
+    <!--
+        The value given to the data-repeater-list attribute will be used as the
+        base of rewritten name attributes.  In this example, the first
+        data-repeater-item's name attribute would become group-a[0][text-input],
+        and the second data-repeater-item woulc become group-a[1][text-input]
+    -->
     <div data-repeater-list="group-a">
       <div data-repeater-item>
         <input type="text" name="text-input" value="A"/>
@@ -24,25 +42,28 @@ Creates an interface to add and remove a repeatable group of input elements.
 <script>
 	$(document).ready(function () {
 		$('.repeater').repeater({
-			// optional
-			// Can set added inputs to a default value by the inputs name
-			// attribute. If a default value is not specified, then all inputs
-			// with name attributes will have their values cleared.
+			// (Optional)
+			// "defaultValues" sets the values of added items.  The keys of
+            // defaultValues refer to the value of the input's name attribute.
+            // If a default value is not specified for an input, then it will
+            // have its value cleared.
 			defaultValues: {
-                'textarea-input': 'foo'
+                'text-input': 'foo'
             },
-            // optional
-            // called just after an item is added.  The item is hidden at this
-            // point.  If a show callback is not given the item will have
-            // $(this).show() called on it.
+            // (Optional)
+            // "show" is called just after an item is added.  The item is hidden
+            // at this point.  If a show callback is not given the item will
+            // have $(this).show() called on it.
             show: function () {
                 $(this).slideDown();
             },
-            // optional
-            // Called when a user clicks a delete item button.  This allows
-            // for the opportunity for a confirmation step, or to send a delete
-            // request to the server, etc.  If a hide callback is not given
-            // the item will be deleted.
+            // (Optional)
+            // "hide" is called when a user clicks on a data-repeater-delete
+            // element.  The item is still visible.  "hide" is passed a function
+            // as its first argument which will properly remove the item.
+            // "hide" allows for a confirmation step, to send a delete request
+            // to the server, etc.  If a hide callback is not given the item
+            // will be deleted.
             hide: function (deleteElement) {
                 if(confirm('Are you sure you want to delete this element?')) {
                     $(this).slideUp(deleteElement);
@@ -51,16 +72,4 @@ Creates an interface to add and remove a repeatable group of input elements.
 		})
 	});
 </script>
-
 ```
-##Templates
-
-Repeater uses the first "data-repeater-item" as a template for added items.
-
-##Rewritten Name Attributes.
-
-Repeater rewrites your name attributes to avoid collisions within the same form.
-(since the name attributes will be repeated).  In the example above, the
-name attributes would be renamed "group-a[0][text-input]" and "group-a[1][text-input]".
-
-Names get reindexed if an item is added or deleted.

@@ -14,24 +14,6 @@ var isFunction = function (value) {
     return value instanceof Function;
 };
 
-var partial = function (f) {
-    var args = Array.prototype.slice.call(arguments, 1);
-    if(isFunction(f)) {
-        return function () {
-            var remainingArgs = Array.prototype.slice.call(arguments);
-            return f.apply(null, args.concat(remainingArgs));
-        };
-    }
-};
-
-var argumentsToArray = function (args) {
-    var array = [], i;
-    for(i = 0; i < args.length; i += 1) {
-        array.push(args[i]);
-    }
-    return array;
-};
-
 var indexOf = function (object, value) {
     return $.inArray(value, object);
 };
