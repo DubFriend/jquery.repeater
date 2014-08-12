@@ -1,0 +1,29 @@
+{
+    "name": "repeater",
+    "version": "0.1.0",
+    "title": "Repeater",
+    "author": {
+        "name": "Brian Detering",
+        "url": "http://briandetering.net/",
+        "email": "BDeterin@gmail.com"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://opensource.org/licenses/MIT"
+        }
+    ],
+    "description": "An interface to add and remove a repeatable group of input elements.",
+    "keywords": [
+        "input",
+        "repeat",
+        "multiple",
+        "form"
+    ],
+    "docs": "https://github.com/DubFriend/repeater/blob/master/README.md",
+    "demo": "http://briandetering.net/repeater",
+    "homepage": "https://github.com/DubFriend/repeater",
+    "dependencies": {
+        "jquery": ">=1.11"
+    }
+}
