@@ -2,6 +2,8 @@
 
 Creates an interface to add and remove a repeatable group of input elements.
 
+###[Demo](http://briandetering.net/repeater)
+
 ##Templates
 
 Repeater uses the first "data-repeater-item" as a template for added items.
