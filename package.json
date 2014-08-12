@@ -1,6 +1,6 @@
 {
   "name": "jquery.repeater",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "repeatable form input interface",
   "main": "index.html",
   "directories": {

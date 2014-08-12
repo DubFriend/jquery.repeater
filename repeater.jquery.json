@@ -1,6 +1,6 @@
 {
     "name": "repeater",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "title": "Repeater",
     "author": {
         "name": "Brian Detering",
@@ -20,9 +20,9 @@
         "multiple",
         "form"
     ],
-    "docs": "https://github.com/DubFriend/repeater/blob/master/README.md",
+    "docs": "https://github.com/DubFriend/jquery.repeater/blob/master/README.md",
     "demo": "http://briandetering.net/repeater",
-    "homepage": "https://github.com/DubFriend/repeater",
+    "homepage": "https://github.com/DubFriend/jquery.repeater",
     "dependencies": {
         "jquery": ">=1.11"
     }
