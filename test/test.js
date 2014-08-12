@@ -45,7 +45,8 @@ var generateNameMappedInputValues = function (group, index, defaultValue, overri
     defaultObject['group-' + group + '[' + index + '][textarea-input]'] = defaultValue;
     defaultObject['group-' + group + '[' + index + '][select-input]'] = defaultValue || null;
     defaultObject['group-' + group + '[' + index + '][radio-input]'] = defaultValue || null;
-    defaultObject['group-' + group + '[' + index + '][checkbox-input]'] = defaultValue ? [defaultValue] : [];
+
+    defaultObject['group-' + group + '[' + index + '][checkbox-input][]'] = defaultValue ? [defaultValue] : [];
     return $.extend(defaultObject, override || {});
 };
 

@@ -10,7 +10,10 @@ Repeater uses the first "data-repeater-item" as a template for added items.
 
 Repeater rewrites your name attributes to avoid collisions within the same form.
 (since the name attributes will be repeated).  In the example below, the
-name attributes would be renamed "group-a[0][text-input]" and "group-a[1][text-input]".
+name attributes would be renamed `group-a[0][text-input]` and `group-a[1][text-input]`.
+
+Checkbox inputs will have an additional `[]` appended.  So for example a checkbox
+with name `foo` would be mapped to `group-a[0][foo][]`.
 
 Names get reindexed if an item is added or deleted.
 
