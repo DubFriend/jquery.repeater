@@ -1,4 +1,4 @@
-// jquery.repeater version 0.1.1
+// jquery.repeater version 0.1.2
 // https://github.com/DubFriend/jquery.repeater
 // (MIT) 11-08-2014
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
