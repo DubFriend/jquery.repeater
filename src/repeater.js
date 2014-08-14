@@ -49,7 +49,15 @@ $.fn.repeater = function(fig) {
             .attr('name').match(/\[([0-9]*)\]/)[1];
 
         $item.inputVal(map(values, identity, function (name) {
-            return groupName + '[' + index + '][' + name + ']';
+            var nameIfNotCheckbox = groupName + '[' + index + '][' + name + ']';
+            return $item.find('[name="' + nameIfNotCheckbox + '"]').length ?
+                nameIfNotCheckbox : nameIfNotCheckbox + '[]';
+            // if($item.find('[name="' + nameIfNotCheckbox + '"]').length) {
+            //     return nameIfNotCheckbox;
+            // }
+            // else
+            // if($item.find(''))
+            // return groupName + '[' + index + '][' + name + ']';
         }));
     };
 

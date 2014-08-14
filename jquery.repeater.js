@@ -1,6 +1,6 @@
-// jquery.repeater version 0.1.3
+// jquery.repeater version 0.1.4
 // https://github.com/DubFriend/jquery.repeater
-// (MIT) 11-08-2014
+// (MIT) 13-08-2014
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 (function ($) {
 'use strict';
@@ -729,7 +729,15 @@ $.fn.repeater = function(fig) {
             .attr('name').match(/\[([0-9]*)\]/)[1];
 
         $item.inputVal(map(values, identity, function (name) {
-            return groupName + '[' + index + '][' + name + ']';
+            var nameIfNotCheckbox = groupName + '[' + index + '][' + name + ']';
+            return $item.find('[name="' + nameIfNotCheckbox + '"]').length ?
+                nameIfNotCheckbox : nameIfNotCheckbox + '[]';
+            // if($item.find('[name="' + nameIfNotCheckbox + '"]').length) {
+            //     return nameIfNotCheckbox;
+            // }
+            // else
+            // if($item.find(''))
+            // return groupName + '[' + index + '][' + name + ']';
         }));
     };
 

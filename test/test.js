@@ -123,12 +123,15 @@ QUnit.test('multiple add buttons', function (assert) {
 
 QUnit.test('add item with default values and rewrite names', function (assert) {
     this.$repeater.repeater({
-        defaultValues: { 'text-input': 'foo' }
+        defaultValues: { 'text-input': 'foo', 'checkbox-input': ['A', 'B'] }
     });
     this.$addButton.click();
     assert.deepEqual(
         getNamedInputValues(this.$repeater.find('[data-repeater-item]').last()),
-        generateNameMappedInputValues('a', 2, '', { 'group-a[2][text-input]': 'foo' })
+        generateNameMappedInputValues('a', 2, '', {
+            'group-a[2][text-input]': 'foo',
+            'group-a[2][checkbox-input][]' : ['A', 'B']
+        })
     );
 });
 
