@@ -1,4 +1,4 @@
-// jquery.repeater version 0.1.4
+// jquery.repeater version 0.1.5
 // https://github.com/DubFriend/jquery.repeater
 // (MIT) 16-10-2014
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
@@ -776,14 +776,12 @@ $.fn.repeater = function(fig) {
     // get fired twice.
 
     $self.find('[data-repeater-create]').click(throttle(50, function () {
-        console.log('createa');
         var $item = $itemTemplate.clone();
         appendItem($item);
         show.call($item.get(0));
     }));
 
     $list.on('click', '[data-repeater-delete]', throttle(50, function () {
-        console.log('delete');
         var self = $(this).closest('[data-repeater-item]').get(0);
         hide.call(self, function () {
             $(self).remove();
