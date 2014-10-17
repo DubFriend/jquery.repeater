@@ -80,12 +80,27 @@ var filter = function (collection, callback) {
     return filtered;
 };
 
-
 var call = function (collection, functionName, args) {
     return map(collection, function (object, name) {
         return object[functionName].apply(object, args || []);
     });
 };
+
+//execute callback immediately and at most one time on the minimumInterval,
+//ignore block attempts
+var throttle = function (minimumInterval, callback) {
+    var timeout = null;
+    return function () {
+        var that = this, args = arguments;
+        if(timeout === null) {
+            timeout = setTimeout(function () {
+                timeout = null;
+            }, minimumInterval);
+            callback.apply(that, args);
+        }
+    };
+};
+
 
 var mixinPubSub = function (object) {
     object = object || {};

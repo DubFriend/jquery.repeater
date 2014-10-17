@@ -52,12 +52,6 @@ $.fn.repeater = function(fig) {
             var nameIfNotCheckbox = groupName + '[' + index + '][' + name + ']';
             return $item.find('[name="' + nameIfNotCheckbox + '"]').length ?
                 nameIfNotCheckbox : nameIfNotCheckbox + '[]';
-            // if($item.find('[name="' + nameIfNotCheckbox + '"]').length) {
-            //     return nameIfNotCheckbox;
-            // }
-            // else
-            // if($item.find(''))
-            // return groupName + '[' + index + '][' + name + ']';
         }));
     };
 
@@ -81,19 +75,26 @@ $.fn.repeater = function(fig) {
         };
     }());
 
-    $self.find('[data-repeater-create]').click(function () {
+    // the throttle functions were put in to accomodate this issue:
+    // https://github.com/DubFriend/jquery.repeater/issues/1
+    // the jquery uniform plugin was causing the click events to
+    // get fired twice.
+
+    $self.find('[data-repeater-create]').click(throttle(50, function () {
+        console.log('createa');
         var $item = $itemTemplate.clone();
         appendItem($item);
         show.call($item.get(0));
-    });
+    }));
 
-    $list.on('click', '[data-repeater-delete]', function () {
+    $list.on('click', '[data-repeater-delete]', throttle(50, function () {
+        console.log('delete');
         var self = $(this).closest('[data-repeater-item]').get(0);
         hide.call(self, function () {
             $(self).remove();
             setIndexes();
         });
-    });
+    }));
 
     return this;
 };

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jquery uniform issue</title>
+
+	<link
+		rel="stylesheet"
+		type="text/css"
+		href="pixelmatrix-uniform/themes/agent/css/uniform.agent.css"/>
+</head>
+<body>
+<a href="https://github.com/DubFriend/jquery.repeater/issues/1">
+	This example is to address the issue at this link.
+</a>
+
+<!-- @include ../../repeater.html -->
+
+<script src="../../jquery-1.11.1.js"></script>
+<script src="pixelmatrix-uniform/jquery.uniform.js"></script>
+<script src="../../jquery.repeater.js"></script>
+
+<script>
+    $(document).ready(function () {
+        'use strict';
+
+        $('.repeater').repeater({
+            defaultValues: {
+                'textarea-input': 'foo',
+                'text-input': 'bar',
+                'select-input': 'B',
+                'checkbox-input': ['A', 'B'],
+                'radio-input': 'B'
+            },
+            show: function () {
+                $(this).slideDown();
+                // Since jquery.uniform is being fired after jquery.repeater
+                // this new element will not have any jquery.uniform applied to
+                // it, so do it here.  Note that simply calling jquery.uniform
+                // before jquery.repeater will break checkboxes in jquery.uniform
+                $(this).find('select, input, a.button, button').uniform();
+            },
+            hide: function (deleteElement) {
+            	// jquery.uniform appears to add click events to button inputs
+            	// which causes "show" and "hide" to get fired twice.
+            	// I wrapped the callback for these events in a throttle to
+            	// prevent this, however blocking functions like "confirm"
+            	// will still allow the function to be called twice in some
+            	// browsers. (I found it to be a problem in firefox,
+            	// but not chrome)
+
+                // if(confirm('Are you sure you want to delete this element?')) {
+                    $(this).slideUp(deleteElement);
+                // }
+            }
+        });
+
+		// For the workaround to work, its important that jquery.uniform
+		// is fired after jquery.repeater.
+        $("select, input, a.button, button").uniform();
+    });
+    </script>
+</body>
+</html>

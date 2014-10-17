@@ -1,6 +1,6 @@
 // jquery.repeater version 0.1.4
 // https://github.com/DubFriend/jquery.repeater
-// (MIT) 13-08-2014
+// (MIT) 16-10-2014
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 (function ($) {
 'use strict';
@@ -87,12 +87,27 @@ var filter = function (collection, callback) {
     return filtered;
 };
 
-
 var call = function (collection, functionName, args) {
     return map(collection, function (object, name) {
         return object[functionName].apply(object, args || []);
     });
 };
+
+//execute callback immediately and at most one time on the minimumInterval,
+//ignore block attempts
+var throttle = function (minimumInterval, callback) {
+    var timeout = null;
+    return function () {
+        var that = this, args = arguments;
+        if(timeout === null) {
+            timeout = setTimeout(function () {
+                timeout = null;
+            }, minimumInterval);
+            callback.apply(that, args);
+        }
+    };
+};
+
 
 var mixinPubSub = function (object) {
     object = object || {};
@@ -732,12 +747,6 @@ $.fn.repeater = function(fig) {
             var nameIfNotCheckbox = groupName + '[' + index + '][' + name + ']';
             return $item.find('[name="' + nameIfNotCheckbox + '"]').length ?
                 nameIfNotCheckbox : nameIfNotCheckbox + '[]';
-            // if($item.find('[name="' + nameIfNotCheckbox + '"]').length) {
-            //     return nameIfNotCheckbox;
-            // }
-            // else
-            // if($item.find(''))
-            // return groupName + '[' + index + '][' + name + ']';
         }));
     };
 
@@ -761,19 +770,26 @@ $.fn.repeater = function(fig) {
         };
     }());
 
-    $self.find('[data-repeater-create]').click(function () {
+    // the throttle functions were put in to accomodate this issue:
+    // https://github.com/DubFriend/jquery.repeater/issues/1
+    // the jquery uniform plugin was causing the click events to
+    // get fired twice.
+
+    $self.find('[data-repeater-create]').click(throttle(50, function () {
+        console.log('createa');
         var $item = $itemTemplate.clone();
         appendItem($item);
         show.call($item.get(0));
-    });
+    }));
 
-    $list.on('click', '[data-repeater-delete]', function () {
+    $list.on('click', '[data-repeater-delete]', throttle(50, function () {
+        console.log('delete');
         var self = $(this).closest('[data-repeater-item]').get(0);
         hide.call(self, function () {
             $(self).remove();
             setIndexes();
         });
-    });
+    }));
 
     return this;
 };
