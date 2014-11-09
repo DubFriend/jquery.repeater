@@ -10,7 +10,7 @@ QUnit.module('repeater', {
         this.$secondRepeater.find('[data-repeater-list]').data(
             'repeater-list', 'group-b'
         );
-        this.$secondRepeater.repeater();
+        // this.$secondRepeater.repeater();
         this.$secondRepeaterAddButton = this.$secondRepeater.find('[data-repeater-create]');
     }
 });
@@ -52,6 +52,7 @@ var generateNameMappedInputValues = function (group, index, defaultValue, overri
 
 QUnit.test('add item', function (assert) {
     this.$repeater.repeater();
+    this.$secondRepeater.repeater();
     this.$addButton.click();
     var $items = this.$repeater.find('[data-repeater-item]');
     assert.strictEqual($items.length, 3, 'adds a third item to list');
@@ -74,8 +75,19 @@ QUnit.test('add item', function (assert) {
     );
 });
 
+QUnit.test('instantiate group of repeaters with a single repeater() call', function (assert) {
+    this.$fixture.find('.repeater').repeater();
+    this.$addButton.click();
+    var $items = this.$secondRepeater.find('[data-repeater-item]');
+    assert.strictEqual(
+        $items.length, 2,
+        'does not add a third item to unclicked list'
+    );
+});
+
 QUnit.test('second repeater add item', function (assert) {
     this.$repeater.repeater();
+    this.$secondRepeater.repeater();
     this.$secondRepeaterAddButton.click();
     var $items = this.$secondRepeater.find('[data-repeater-item]');
     assert.strictEqual($items.length, 3, 'adds a third item to list');

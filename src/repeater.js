@@ -1,98 +1,103 @@
 $.fn.repeater = function(fig) {
+
     fig = fig || {};
 
-    var $self = this;
+    $(this).each(function () {
 
-    var show = fig.show || function () {
-        $(this).show();
-    };
+        var $self = $(this);
 
-    var hide = fig.hide || function (removeElement) {
-        removeElement();
-    };
+        var show = fig.show || function () {
+            $(this).show();
+        };
 
-    var $list = $self.find('[data-repeater-list]');
+        var hide = fig.hide || function (removeElement) {
+            removeElement();
+        };
 
-    var $itemTemplate = $list.find('[data-repeater-item]')
-            .first().clone().hide();
+        var $list = $self.find('[data-repeater-list]');
 
-    var groupName = $list.data('repeater-list');
+        var $itemTemplate = $list.find('[data-repeater-item]')
+                .first().clone().hide();
 
-    var setIndexes = function () {
-        $list.find('[data-repeater-item]').each(function (index) {
-            $(this).find('[name]').each(function () {
-                // match non empty brackets (ex: "[foo]")
-                var matches = $(this).attr('name').match(/\[[^\]]+\]/g);
+        var groupName = $list.data('repeater-list');
 
-                var name = matches ?
-                    // strip "[" and "]" characters
-                    last(matches).replace(/\[|\]/g, '') :
-                    $(this).attr('name');
+        var setIndexes = function () {
+            $list.find('[data-repeater-item]').each(function (index) {
+                $(this).find('[name]').each(function () {
+                    // match non empty brackets (ex: "[foo]")
+                    var matches = $(this).attr('name').match(/\[[^\]]+\]/g);
 
-                var newName = groupName + '[' + index + '][' + name + ']' +
-                    ($(this).is(':checkbox') ? '[]' : '');
+                    var name = matches ?
+                        // strip "[" and "]" characters
+                        last(matches).replace(/\[|\]/g, '') :
+                        $(this).attr('name');
 
-                $(this).attr('name', newName);
+                    var newName = groupName + '[' + index + '][' + name + ']' +
+                        ($(this).is(':checkbox') ? '[]' : '');
+
+                    $(this).attr('name', newName);
+                });
             });
-        });
 
-        $list.find('input[name][checked]')
-            .removeAttr('checked')
-            .prop('checked', true);
-    };
+            $list.find('input[name][checked]')
+                .removeAttr('checked')
+                .prop('checked', true);
+        };
 
-    setIndexes();
+        setIndexes();
 
-    var setItemsValues = function ($item, values) {
-        var index;
-        index = $item.find('[name]').first()
-            .attr('name').match(/\[([0-9]*)\]/)[1];
+        var setItemsValues = function ($item, values) {
+            var index;
+            index = $item.find('[name]').first()
+                .attr('name').match(/\[([0-9]*)\]/)[1];
 
-        $item.inputVal(map(values, identity, function (name) {
-            var nameIfNotCheckbox = groupName + '[' + index + '][' + name + ']';
-            return $item.find('[name="' + nameIfNotCheckbox + '"]').length ?
-                nameIfNotCheckbox : nameIfNotCheckbox + '[]';
+            $item.inputVal(map(values, identity, function (name) {
+                var nameIfNotCheckbox = groupName + '[' + index + '][' + name + ']';
+                return $item.find('[name="' + nameIfNotCheckbox + '"]').length ?
+                    nameIfNotCheckbox : nameIfNotCheckbox + '[]';
+            }));
+        };
+
+        var appendItem = (function () {
+            var setupTemplate = function ($item) {
+                var defaultValues = fig.defaultValues;
+
+                $item.find('[name]').each(function () {
+                    $(this).inputClear();
+                });
+
+                if(defaultValues) {
+                    setItemsValues($item, defaultValues);
+                }
+            };
+
+            return function ($item) {
+                $list.append($item);
+                setIndexes();
+                setupTemplate($item);
+            };
+        }());
+
+        // the throttle functions were put in to accomodate this issue:
+        // https://github.com/DubFriend/jquery.repeater/issues/1
+        // the jquery uniform plugin was causing the click events to
+        // get fired twice.
+
+        $self.find('[data-repeater-create]').click(throttle(50, function () {
+            var $item = $itemTemplate.clone();
+            appendItem($item);
+            show.call($item.get(0));
         }));
-    };
 
-    var appendItem = (function () {
-        var setupTemplate = function ($item) {
-            var defaultValues = fig.defaultValues;
-
-            $item.find('[name]').each(function () {
-                $(this).inputClear();
+        $list.on('click', '[data-repeater-delete]', throttle(50, function () {
+            var self = $(this).closest('[data-repeater-item]').get(0);
+            hide.call(self, function () {
+                $(self).remove();
+                setIndexes();
             });
+        }));
 
-            if(defaultValues) {
-                setItemsValues($item, defaultValues);
-            }
-        };
-
-        return function ($item) {
-            $list.append($item);
-            setIndexes();
-            setupTemplate($item);
-        };
-    }());
-
-    // the throttle functions were put in to accomodate this issue:
-    // https://github.com/DubFriend/jquery.repeater/issues/1
-    // the jquery uniform plugin was causing the click events to
-    // get fired twice.
-
-    $self.find('[data-repeater-create]').click(throttle(50, function () {
-        var $item = $itemTemplate.clone();
-        appendItem($item);
-        show.call($item.get(0));
-    }));
-
-    $list.on('click', '[data-repeater-delete]', throttle(50, function () {
-        var self = $(this).closest('[data-repeater-item]').get(0);
-        hide.call(self, function () {
-            $(self).remove();
-            setIndexes();
-        });
-    }));
+    });
 
     return this;
 };
