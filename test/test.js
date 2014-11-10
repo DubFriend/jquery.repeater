@@ -10,7 +10,6 @@ QUnit.module('repeater', {
         this.$secondRepeater.find('[data-repeater-list]').data(
             'repeater-list', 'group-b'
         );
-        // this.$secondRepeater.repeater();
         this.$secondRepeaterAddButton = this.$secondRepeater.find('[data-repeater-create]');
     }
 });

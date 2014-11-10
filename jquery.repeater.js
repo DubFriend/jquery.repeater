@@ -1,4 +1,4 @@
-// jquery.repeater version 0.1.5
+// jquery.repeater version 0.1.6
 // https://github.com/DubFriend/jquery.repeater
 // (MIT) 09-11-2014
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
@@ -571,7 +571,10 @@ var buildFormInputs = function (fig) {
         else if($self.is('textarea')) {
             addInputsBasic('textarea', $self);
         }
-        else if($self.is('input[type="text"]')) {
+        else if(
+            $self.is('input[type="text"]') ||
+            $self.is('input') && !$self.attr('type')
+        ) {
             addInputsBasic('text', $self);
         }
         else if($self.is('input[type="password"]')) {
