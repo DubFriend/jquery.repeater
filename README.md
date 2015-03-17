@@ -73,7 +73,11 @@ Names get reindexed if an item is added or deleted.
                 if(confirm('Are you sure you want to delete this element?')) {
                     $(this).slideUp(deleteElement);
                 }
-            }
+            },
+            // (Optional)
+            // Removes the delete button from the first list item,
+            // defaults to false.
+            isFirstItemUndeletable: true
 		})
 	});
 </script>
