@@ -19,6 +19,14 @@ $.fn.repeater = function(fig) {
         var $itemTemplate = $list.find('[data-repeater-item]')
                 .first().clone().hide();
 
+        var $firstDeleteButton = $(this).find('[data-repeater-item]')
+                                        .first()
+                                        .find('[data-repeater-delete]');
+
+        if(fig.isFirstItemUndeletable && $firstDeleteButton) {
+            $firstDeleteButton.remove();
+        }
+
         var groupName = $list.data('repeater-list');
 
         var setIndexes = function () {

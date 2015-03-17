@@ -219,3 +219,12 @@ QUnit.asyncTest('custom hide callback', function (assert) {
     this.$repeater.find('[data-repeater-item]').first()
         .find('[data-repeater-delete]').click();
 });
+
+QUnit.test('isFirstItemUndeletable configuration option', function (assert) {
+    this.$repeater.repeater({ isFirstItemUndeletable: true });
+
+    var $firstDeleteButton = this.$repeater.find('[data-repeater-item]')
+                                        .first().find('[data-repeater-delete]');
+
+    assert.strictEqual($firstDeleteButton.length, 0, 'first delete button is removed');
+});

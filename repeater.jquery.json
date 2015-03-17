@@ -18,7 +18,8 @@
         "input",
         "repeat",
         "multiple",
-        "form"
+        "form",
+        "jquery-plugin"
     ],
     "docs": "https://github.com/DubFriend/jquery.repeater/blob/master/README.md",
     "demo": "http://briandetering.net/repeater",
