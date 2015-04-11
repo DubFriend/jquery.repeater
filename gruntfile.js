@@ -21,10 +21,6 @@ module.exports = function (grunt) {
             index: {
                 src: 'index.pre.html',
                 dest: 'index.html'
-            },
-            jquery_uniform_issue: {
-                src: 'issue_examples/jquery_uniform/index.pre.html',
-                dest: 'issue_examples/jquery_uniform/index.html'
             }
         },
 

@@ -1,6 +1,6 @@
-// jquery.repeater version 0.1.7
+// jquery.repeater version 1.0.0
 // https://github.com/DubFriend/jquery.repeater
-// (MIT) 16-03-2015
+// (MIT) 11-04-2015
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 (function ($) {
 'use strict';
@@ -784,24 +784,19 @@ $.fn.repeater = function(fig) {
             };
         }());
 
-        // the throttle functions were put in to accomodate this issue:
-        // https://github.com/DubFriend/jquery.repeater/issues/1
-        // the jquery uniform plugin was causing the click events to
-        // get fired twice.
-
-        $self.find('[data-repeater-create]').click(throttle(50, function () {
+        $self.find('[data-repeater-create]').click(function () {
             var $item = $itemTemplate.clone();
             appendItem($item);
             show.call($item.get(0));
-        }));
+        });
 
-        $list.on('click', '[data-repeater-delete]', throttle(50, function () {
+        $list.on('click', '[data-repeater-delete]', function () {
             var self = $(this).closest('[data-repeater-item]').get(0);
             hide.call(self, function () {
                 $(self).remove();
                 setIndexes();
             });
-        }));
+        });
 
     });
 
