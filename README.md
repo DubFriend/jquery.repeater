@@ -4,6 +4,9 @@ Creates an interface to add and remove a repeatable group of input elements.
 
 ###[Demo](http://briandetering.net/repeater)
 
+`bower install jquery.repeater --save`
+`npm install jquery.repeater --save`
+
 ##Templates
 
 Repeater uses the first "data-repeater-item" as a template for added items.
