@@ -2,6 +2,16 @@ $.fn.repeater = function(fig) {
 
     fig = fig || {};
 
+    
+
+    var inputVal = function ($self, value) {
+
+    };
+
+    var inputClear = function ($self) {
+
+    };
+
     $(this).each(function () {
 
         var $self = $(this);

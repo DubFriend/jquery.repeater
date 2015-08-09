@@ -1,6 +1,6 @@
-// jquery.repeater version 1.0.0
+// jquery.repeater version 1.0.1
 // https://github.com/DubFriend/jquery.repeater
-// (MIT) 11-04-2015
+// (MIT) 09-08-2015
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 (function ($) {
 'use strict';
@@ -615,7 +615,8 @@ var buildFormInputs = function (fig) {
             addInputsGroup('checkbox', $self);
         }
         else {
-            throw 'invalid input type';
+            //in all other cases default to a "text" input interface.
+            addInputsBasic('text', $self);
         }
     }
     else {
@@ -699,6 +700,16 @@ $.fn.inputClear = function () {
 $.fn.repeater = function(fig) {
 
     fig = fig || {};
+
+    
+
+    var inputVal = function ($self, value) {
+
+    };
+
+    var inputClear = function ($self) {
+
+    };
 
     $(this).each(function () {
 
@@ -802,4 +813,5 @@ $.fn.repeater = function(fig) {
 
     return this;
 };
+
 }(jQuery));

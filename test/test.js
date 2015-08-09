@@ -14,24 +14,6 @@ QUnit.module('repeater', {
     }
 });
 
-QUnit.asyncTest('server echo\'s post data', function (assert) {
-    expect(1);
-    $.ajax({
-        url: 'http://localhost/jquery.repeater/test/echo.php',
-        type: 'POST',
-        data: { foo: 'bar' },
-        dataType: 'json',
-        success: function (response) {
-            assert.deepEqual(response, { foo: 'bar' });
-            QUnit.start();
-        },
-        error: function (xhr) {
-            console.error('ERROR', xhr.responseText);
-            QUnit.start();
-        }
-    });
-});
-
 var getNamedInputValues = function ($scope) {
     return filter($scope.inputVal(), function (val, key) {
         return key !== 'undefined';
