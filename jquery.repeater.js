@@ -1,6 +1,6 @@
-// jquery.repeater version 1.0.2
+// jquery.repeater version 1.1.0
 // https://github.com/DubFriend/jquery.repeater
-// (MIT) 09-08-2015
+// (MIT) 19-09-2015
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 (function ($) {
 'use strict';
@@ -698,18 +698,7 @@ $.fn.inputClear = function () {
 }(jQuery));
 
 $.fn.repeater = function(fig) {
-
     fig = fig || {};
-
-    
-
-    var inputVal = function ($self, value) {
-
-    };
-
-    var inputClear = function ($self) {
-
-    };
 
     $(this).each(function () {
 
@@ -762,6 +751,10 @@ $.fn.repeater = function(fig) {
         };
 
         setIndexes();
+
+        if(fig.ready) {
+            fig.ready(setIndexes);
+        }
 
         var setItemsValues = function ($item, values) {
             var index;

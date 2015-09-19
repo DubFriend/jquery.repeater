@@ -1,16 +1,5 @@
 $.fn.repeater = function(fig) {
-
     fig = fig || {};
-
-    
-
-    var inputVal = function ($self, value) {
-
-    };
-
-    var inputClear = function ($self) {
-
-    };
 
     $(this).each(function () {
 
@@ -63,6 +52,10 @@ $.fn.repeater = function(fig) {
         };
 
         setIndexes();
+
+        if(fig.ready) {
+            fig.ready(setIndexes);
+        }
 
         var setItemsValues = function ($item, values) {
             var index;

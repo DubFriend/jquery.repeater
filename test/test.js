@@ -210,3 +210,28 @@ QUnit.test('isFirstItemUndeletable configuration option', function (assert) {
 
     assert.strictEqual($firstDeleteButton.length, 0, 'first delete button is removed');
 });
+
+QUnit.asyncTest('has ready callback option and setIndexes', function (assert) {
+    expect(3);
+    var $list = this.$secondRepeater.find('[data-repeater-list]');
+    this.$secondRepeater.repeater({
+        ready: function (setIndexes) {
+            assert.ok(isFunction(setIndexes), 'passed setIndexes function');
+            var $lastItem = $list.find('[data-repeater-item]').last();
+            $list.prepend($lastItem.clone());
+            $lastItem.remove();
+            setIndexes();
+
+            var indeces = $list.find('[name]').map(function () {
+                return $(this).attr('name').match(/\[([0-9])+\]/)[1];
+            }).get();
+
+            console.log(indeces[0], indeces[10]);
+
+            assert.strictEqual(indeces[0], '0');
+            assert.strictEqual(indeces[10], '1');
+
+            QUnit.start();
+        }
+    });
+});

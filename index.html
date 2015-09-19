@@ -18,41 +18,41 @@
       <div data-repeater-list="group-a">
         <div data-repeater-item>
           <input name="untyped-input" value="A"/>
-
+    
           <input type="text" name="text-input" value="A"/>
-
-          <input type="date" name="tel-input"/>
-
+    
+          <input type="date" name="date-input"/>
+    
           <textarea name="textarea-input">A</textarea>
-
+    
           <input type="radio" name="radio-input" value="A" checked/>
           <input type="radio" name="radio-input" value="B"/>
-
+    
           <input type="checkbox" name="checkbox-input" value="A" checked/>
           <input type="checkbox" name="checkbox-input" value="B"/>
-
+    
           <select name="select-input">
             <option value="A" selected>A</option>
             <option value="B">B</option>
           </select>
-
+    
           <input data-repeater-delete type="button" value="Delete"/>
         </div>
         <div data-repeater-item>
           <input name="untyped-input" value="A"/>
-
+    
           <input type="text" name="text-input" value="B"/>
-
-          <input type="date" name="tel-input"/>
-
+    
+          <input type="date" name="date-input"/>
+    
           <textarea name="textarea-input">B</textarea>
-
+    
           <input type="radio" name="radio-input" value="A" />
           <input type="radio" name="radio-input" value="B" checked/>
-
+    
           <input type="checkbox" name="checkbox-input" value="A"/>
           <input type="checkbox" name="checkbox-input" value="B" checked/>
-
+    
           <select name="select-input">
             <option value="A">A</option>
             <option value="B" selected>B</option>
@@ -62,13 +62,34 @@
       </div>
       <input data-repeater-create type="button" value="Add"/>
     </form>
-
+    
 
     <script src="jquery-1.11.1.js"></script>
     <script src="jquery.repeater.js"></script>
     <script>
     $(document).ready(function () {
         'use strict';
+
+        // $('.repeater').repeater(function () {
+        //     return {
+        //         defaultValues: {
+        //             'textarea-input': 'foo',
+        //             'text-input': 'bar',
+        //             'select-input': 'B',
+        //             'checkbox-input': ['A', 'B'],
+        //             'radio-input': 'B'
+        //         },
+        //         show: function () {
+        //             $(this).slideDown();
+        //         },
+        //         hide: function (deleteElement) {
+        //             if(confirm('Are you sure you want to delete this element?')) {
+        //                 $(this).slideUp(deleteElement);
+        //             }
+        //         }
+        //     };
+        // });
+
         $('.repeater').repeater({
             defaultValues: {
                 'textarea-input': 'foo',
@@ -84,6 +105,9 @@
                 if(confirm('Are you sure you want to delete this element?')) {
                     $(this).slideUp(deleteElement);
                 }
+            },
+            ready: function (setIndexes) {
+                
             }
         });
     });

@@ -78,6 +78,13 @@ Names get reindexed if an item is added or deleted.
                 }
             },
             // (Optional)
+            // You can use this if you need to manually re-index the list
+            // for example if you are using a drag and drop library to reorder
+            // list items.
+            ready: function (setIndexes) {
+                $dragAndDrop.on('drop', setIndexes);
+            },
+            // (Optional)
             // Removes the delete button from the first list item,
             // defaults to false.
             isFirstItemUndeletable: true
