@@ -13,7 +13,6 @@
 </head>
 <body>
     <h1>Repeater</h1>
-
     <form action="echo.php" class="repeater">
       <div data-repeater-list="group-a">
         <div data-repeater-item>
@@ -34,6 +33,11 @@
           <select name="select-input">
             <option value="A" selected>A</option>
             <option value="B">B</option>
+          </select>
+    
+          <select name="multiple-select-input" multiple>
+            <option value="A" selected>A</option>
+            <option value="B" selected>B</option>
           </select>
     
           <input data-repeater-delete type="button" value="Delete"/>
@@ -57,13 +61,18 @@
             <option value="A">A</option>
             <option value="B" selected>B</option>
           </select>
+    
+          <select name="multiple-select-input" multiple>
+            <option value="A" selected>A</option>
+            <option value="B" selected>B</option>
+          </select>
+    
           <input data-repeater-delete type="button" value="Delete"/>
         </div>
       </div>
       <input data-repeater-create type="button" value="Add"/>
     </form>
     
-
     <script src="jquery-1.11.1.js"></script>
     <script src="jquery.repeater.js"></script>
     <script>
@@ -107,7 +116,7 @@
                 }
             },
             ready: function (setIndexes) {
-                
+
             }
         });
     });

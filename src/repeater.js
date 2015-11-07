@@ -40,7 +40,7 @@ $.fn.repeater = function(fig) {
                         $(this).attr('name');
 
                     var newName = groupName + '[' + index + '][' + name + ']' +
-                        ($(this).is(':checkbox') ? '[]' : '');
+                        ($(this).is(':checkbox') || $(this).attr('multiple') ? '[]' : '');
 
                     $(this).attr('name', newName);
                 });
