@@ -92,3 +92,21 @@ Names get reindexed if an item is added or deleted.
 	});
 </script>
 ```
+
+## repeaterVal
+
+Get a structured object of repeater values, without submitting the form.
+
+The rewritten name attributes of the form `group[index][name]` work well
+when submitting to a server that knows how to parse this format, but not as well
+when trying to grab the values via javascript.
+
+The `repeaterVal` method can be called on a repeater group and will parse the
+renamed attributes into something more easily digestible
+
+```javascript
+// setup the repeater
+$('.repeater').repeater();
+//get the values of the inputs as a formatted object
+$('.repeater').repeaterVal();
+```

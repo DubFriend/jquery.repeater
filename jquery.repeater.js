@@ -1,4 +1,4 @@
-// jquery.repeater version 1.1.0
+// jquery.repeater version 1.1.2
 // https://github.com/DubFriend/jquery.repeater
 // (MIT) 07-11-2015
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
@@ -697,6 +697,33 @@ $.fn.inputClear = function () {
 
 }(jQuery));
 
+$.fn.repeaterVal = function () {
+    var rawData = $(this).inputVal();
+    var mapped = {};
+
+    foreach(rawData, function (val, key) {
+        var group, index, name;
+        var matches;
+        if(key !== "undefined") {
+            matches = key.match(/^([^\[]+)\[([0-9]+)\]\[([^\]]+)/);
+            group = matches[1];
+            index = matches[2];
+            name = matches[3];
+            if(!mapped[group]) {
+                mapped[group] = [];
+            }
+
+            if(!mapped[group][index]) {
+                mapped[group][index] = {};
+            }
+
+            mapped[group][index][name] = val;
+        }
+    });
+
+    return mapped;
+};
+
 $.fn.repeater = function(fig) {
     fig = fig || {};
 
@@ -801,6 +828,7 @@ $.fn.repeater = function(fig) {
                 setIndexes();
             });
         });
+
 
     });
 

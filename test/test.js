@@ -251,3 +251,27 @@ QUnit.asyncTest('has ready callback option and setIndexes', function (assert) {
         }
     });
 });
+
+QUnit.test('repeaterVal', function (assert) {
+    this.$repeater.repeater();
+    assert.deepEqual(this.$repeater.repeaterVal(), {
+        "group-a": [
+            {
+                "text-input": "A",
+                "textarea-input": "A",
+                "select-input": "A",
+                "multiple-select-input": ["A", "B"],
+                "radio-input": "A",
+                "checkbox-input": ["A"]
+            },
+            {
+                "text-input": "B",
+                "textarea-input": "B",
+                "select-input": "B",
+                "multiple-select-input": ["A", "B"],
+                "radio-input": "B",
+                "checkbox-input": ["B"]
+            }
+        ]
+    });
+});
