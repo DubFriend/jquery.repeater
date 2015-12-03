@@ -25,7 +25,7 @@ $.fn.repeaterVal = function () {
     return mapped;
 };
 
-$.fn.repeater = function(fig) {
+$.fn.repeater = function (fig) {
     fig = fig || {};
 
     $(this).each(function () {
@@ -40,13 +40,12 @@ $.fn.repeater = function(fig) {
             removeElement();
         };
 
-        var $list = $self.find('[data-repeater-list]');
+        var $list = $self.find('[data-repeater-list]').first();
 
         var $itemTemplate = $list.find('[data-repeater-item]')
-                .first().clone().hide();
+                                 .first().clone().hide();
 
-        var $firstDeleteButton = $(this).find('[data-repeater-item]')
-                                        .first()
+        var $firstDeleteButton = $(this).find('[data-repeater-item]').first()
                                         .find('[data-repeater-delete]');
 
         if(fig.isFirstItemUndeletable && $firstDeleteButton) {
@@ -116,11 +115,45 @@ $.fn.repeater = function(fig) {
             };
         }());
 
-        $self.find('[data-repeater-create]').click(function () {
+
+
+        // $self.find('[data-repeater-create]').click(function () {
+        // $self.children().filter(function () {
+        //     return !$(this).is('[data-repeater-list]') &&
+        //             $(this).find('[data-repeater-list]').length === 0;
+        // })
+        //     var $item = $itemTemplate.clone();
+        //     appendItem($item);
+        //     show.call($item.get(0));
+        // });
+
+        var addItem = function () {
             var $item = $itemTemplate.clone();
             appendItem($item);
             show.call($item.get(0));
+        };
+
+        $self.children().each(function () {
+            if(
+                !$(this).is('[data-repeater-list]') &&
+                $(this).find('[data-repeater-list]').length === 0
+            ) {
+                if($(this).is('[data-repeater-create]')) {
+                    $(this).click(addItem);
+                }
+                else if($(this).find('[data-repeater-create]').length !== 0) {
+                    $(this).find('[data-repeater-create]').click(addItem);
+                }
+            }
+
+            // !$(this).is('[data-repeater-list]') &&
+            // $(this).find('[data-repeater-list]').length === 0 &&
+            // ($(this).is('[data-repeater-create]') || $(this).find('[]'))
+            // if(
+            //
+            // )
         });
+
 
         $list.on('click', '[data-repeater-delete]', function () {
             var self = $(this).closest('[data-repeater-item]').get(0);
@@ -129,8 +162,6 @@ $.fn.repeater = function(fig) {
                 setIndexes();
             });
         });
-
-
     });
 
     return this;
