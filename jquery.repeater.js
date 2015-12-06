@@ -843,18 +843,6 @@ $.fn.repeater = function (fig) {
                             nestedFig.repeaters
                         );
                     });
-
-                    // if(repeaters) {
-                    //     foreach(repeaters, function (nestedFig) {
-                    //         var $repeater = $item.find(nestedFig.selector);
-                    //         setIndexes(
-                    //             $filterNested($repeater.find('[data-repeater-item]'), nestedFig.repeaters || []),
-                    //             groupName + '[' + index + ']' +
-                    //                         '[' + $repeater.find('[data-repeater-list]').first().data('repeater-list') + ']',
-                    //             nestedFig.repeaters
-                    //         );
-                    //     });
-                    // }
                 });
             });
 

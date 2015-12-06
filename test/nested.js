@@ -221,3 +221,12 @@ QUnit.test('nested default values last item', function (assert) {
         }
     );
 });
+
+QUnit.test('repeaterVal nested', function (assert) {
+    assert.deepEqual(this.$outerRepeater.repeaterVal(), {
+        'outer-group': [{ 
+            'text-input': 'A',
+            'inner-group': [{ 'inner-text-input': 'B' }]
+        }]
+    });
+});
