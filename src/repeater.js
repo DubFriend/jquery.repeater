@@ -43,7 +43,6 @@ $.fn.repeater = function (fig) {
         var $list = $self.find('[data-repeater-list]').first();
 
         var $filterNested = function ($items, repeaters) {
-            repeaters = repeaters || fig.repeaters;
             return $items.filter(function () {
                 return repeaters ?
                     $(this).closest(
@@ -53,7 +52,7 @@ $.fn.repeater = function (fig) {
         };
 
         var $items = function () {
-            return $filterNested($list.find('[data-repeater-item]'));
+            return $filterNested($list.find('[data-repeater-item]'), fig.repeaters);
         };
 
         var $itemTemplate = $list.find('[data-repeater-item]')
@@ -86,11 +85,19 @@ $.fn.repeater = function (fig) {
             }
         };
 
+        var $foreachRepeaterInItem = function (repeaters, $item, cb) {
+            if(repeaters) {
+                foreach(repeaters, function (nestedFig) {
+                    cb.call($item.find(nestedFig.selector)[0], nestedFig);
+                });
+            }
+        };
+
         var setIndexes = function ($items, groupName, repeaters) {
             $items.each(function (index) {
                 var $item = $(this);
                 $item.data('item-name', groupName + '[' + index + ']');
-                $filterNested($item.find('[name]'), repeaters || [])
+                $filterNested($item.find('[name]'), repeaters)
                 .each(function () {
                     var $input = $(this);
                     // match non empty brackets (ex: "[foo]")
@@ -107,18 +114,15 @@ $.fn.repeater = function (fig) {
 
                     $input.attr('name', newName);
 
-                    if(repeaters) {
-                        foreach(repeaters, function (nestedFig) {
-                            var $repeater = $item.find(nestedFig.selector);
-
-                            setIndexes(
-                                $filterNested($repeater.find('[data-repeater-item]'), nestedFig.repeaters || []),
-                                groupName + '[' + index + ']' +
-                                            '[' + $repeater.find('[data-repeater-list]').first().data('repeater-list') + ']',
-                                nestedFig.repeaters
-                            );
-                        });
-                    }
+                    $foreachRepeaterInItem(repeaters, $item, function (nestedFig) {
+                        var $repeater = $(this);
+                        setIndexes(
+                            $filterNested($repeater.find('[data-repeater-item]'), nestedFig.repeaters || []),
+                            groupName + '[' + index + ']' +
+                                        '[' + $repeater.find('[data-repeater-list]').first().data('repeater-list') + ']',
+                            nestedFig.repeaters
+                        );
+                    });
                 });
             });
 
@@ -136,35 +140,45 @@ $.fn.repeater = function (fig) {
             });
         }
 
-        var setItemsValues = function ($item, values) {
-            var index;
-            index = $item.find('[name]').first()
-                .attr('name').match(/\[([0-9]*)\]/)[1];
 
-            $item.inputVal(map(values, identity, function (name) {
-                var nameIfNotCheckbox = getGroupName() + '[' + index + '][' + name + ']';
-                return $item.find('[name="' + nameIfNotCheckbox + '"]').length ?
-                    nameIfNotCheckbox : nameIfNotCheckbox + '[]';
-            }));
-        };
 
         var appendItem = (function () {
-            var setupTemplate = function ($item) {
-                var defaultValues = fig.defaultValues;
+            var setItemsValues = function ($item, values, repeaters) {
+                if(values) {
+                    var inputNames = {};
+                    $filterNested($item.find('[name]'), repeaters).each(function () {
+                        var key = $(this).attr('name').match(/\[([^\]]*)(\]|\]\[\])$/)[1];
+                        inputNames[key] = $(this).attr('name');
+                    });
 
-                $item.find('[name]').each(function () {
-                    $(this).inputClear();
-                });
-
-                if(defaultValues) {
-                    setItemsValues($item, defaultValues);
+                    $item.inputVal(map(values, identity, function (name) {
+                        return inputNames[name];
+                    }));
                 }
+
+                $foreachRepeaterInItem(repeaters, $item, function (nestedFig) {
+                    var $repeater = $(this);
+                    $filterNested(
+                        $repeater.find('[data-repeater-item]'),
+                        nestedFig.repeaters
+                    )
+                    .each(function () {
+                        setItemsValues(
+                            $(this),
+                            nestedFig.defaultValues,
+                            nestedFig.repeaters || []
+                        );
+                    });
+                });
             };
 
             return function ($item) {
                 $list.append($item);
                 setIndexes($items(), getGroupName(), fig.repeaters);
-                setupTemplate($item);
+                $item.find('[name]').each(function () {
+                    $(this).inputClear();
+                });
+                setItemsValues($item, fig.defaultValues, fig.repeaters);
             };
         }());
 

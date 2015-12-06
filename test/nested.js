@@ -164,3 +164,60 @@ QUnit.test('delete added item nested inner from repeated outer', function (asser
         }
     );
 });
+
+QUnit.test('nested default values first item', function (assert) {
+    this.$outerRepeater.repeater({
+        repeaters: [{
+            selector: '.inner-repeater',
+            defaultValues: { 'inner-text-input': 'foo' }
+        }]
+    });
+
+    this.$innerAddButton.click();
+
+    assert.deepEqual(
+        getNamedInputValues(this.$outerRepeater),
+        {
+            "outer-group[0][text-input]": "A",
+            "outer-group[0][inner-group][0][inner-text-input]": "B",
+            "outer-group[0][inner-group][1][inner-text-input]": "foo"
+        }
+    );
+});
+
+QUnit.test('nested default values last item', function (assert) {
+    this.$outerRepeater.repeater({
+        repeaters: [{
+            selector: '.inner-repeater',
+            defaultValues: { 'inner-text-input': 'foo' }
+        }]
+    });
+
+    this.$outerAddButton.click();
+    var $lastOuterItem = this.$outerRepeater
+        .find('[data-repeater-list="outer-group"] > [data-repeater-item]')
+        .last();
+
+    assert.deepEqual(
+        getNamedInputValues(this.$outerRepeater),
+        {
+            "outer-group[0][text-input]": "A",
+            "outer-group[0][inner-group][0][inner-text-input]": "B",
+            "outer-group[1][text-input]": "",
+            "outer-group[1][inner-group][0][inner-text-input]": "foo"
+        }
+    );
+
+    $lastOuterItem.find('[data-repeater-create]').click();
+
+    assert.deepEqual(
+        getNamedInputValues(this.$outerRepeater),
+        {
+            "outer-group[0][text-input]": "A",
+            "outer-group[0][inner-group][0][inner-text-input]": "B",
+            "outer-group[1][text-input]": "",
+            "outer-group[1][inner-group][0][inner-text-input]": "foo",
+            "outer-group[1][inner-group][1][inner-text-input]": "foo"
+        }
+    );
+});
