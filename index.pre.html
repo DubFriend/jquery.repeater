@@ -43,7 +43,9 @@
             }
         });
 
-        $('.outer-repeater').repeater();
+        $('.outer-repeater').repeater({
+            repeaters: [{ selector: '.inner-repeater' }]
+        });
     });
     </script>
 </body>

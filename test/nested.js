@@ -4,7 +4,6 @@ QUnit.module('nested-repeater', {
         this.$fixture.html($('#template').html());
         this.$outerRepeater = this.$fixture.find('.outer-repeater');
         this.$innerRepeater = this.$fixture.find('.inner-repeater');
-        // this.$outerList = this.$fixture.find('[data-repeater-list="outer-group"]');
         this.$outerAddButton = this.$fixture.find('.outer-repeater > [data-repeater-create]');
         this.$innerAddButton = this.$fixture.find('.inner-repeater > [data-repeater-create]');
     }
@@ -12,41 +11,61 @@ QUnit.module('nested-repeater', {
 
 
 QUnit.test('add item nested outer', function (assert) {
-    this.$outerRepeater.repeater({ repeater: {} });
+    this.$outerRepeater.repeater({ repeaters: [{ selector: '.inner-repeater' }] });
     this.$outerAddButton.click();
     var $items = this.$outerRepeater.find('[data-repeater-list="outer-group"] > [data-repeater-item]');
-    // console.log(this.$outerRepeater.html());
-    console.log(JSON.stringify(getNamedInputValues($items.first()), null, 2));
+
     assert.strictEqual($items.length, 2, 'adds a second item to list');
+
     assert.strictEqual(
         $items.first().find('[data-repeater-list="inner-group"] > [data-repeater-item]').length,
         1, 'does not duplicate first inner repeater'
     );
+
     assert.strictEqual(
         $items.last().find('[data-repeater-list="inner-group"] > [data-repeater-item]').length,
         1, 'does not duplicate last inner repeater'
     );
 
-    // var $items = this.$repeater.find('[data-repeater-item]');
-    // assert.strictEqual($items.length, 3, 'adds a third item to list');
+    assert.deepEqual(
+        getNamedInputValues($items.first()),
+        {
+            "outer-group[0][text-input]": "A",
+            "outer-group[0][inner-group][0][inner-text-input]": "B"
+        },
+        'renamed first item'
+    );
 
-    // assert.deepEqual(
-    //     getNamedInputValues($items.last()),
-    //     generateNameMappedInputValues('a', 2, ''),
-    //     'added items inputs are clear'
-    // );
-    //
-    // assert.deepEqual(
-    //     getNamedInputValues($items.first()),
-    //     generateNameMappedInputValues('a', 0, 'A', {
-    //         "group-a[0][multiple-select-input][]": ['A', 'B']
-    //     }),
-    //     'does not clear other inputs'
-    // );
-    //
-    // assert.strictEqual(
-    //     this.$secondRepeater.find('[data-repeater-item]').length,
-    //     2,
-    //     'does not add third item to second repeater'
-    // );
+    assert.deepEqual(
+        getNamedInputValues($items.last()),
+        {
+            "outer-group[1][text-input]": "",
+            "outer-group[1][inner-group][0][inner-text-input]": ""
+        },
+        'renamed last item, values cleared'
+    );
+});
+
+QUnit.test('add item nested inner', function (assert) {
+    this.$outerRepeater.repeater({ repeaters: [{ selector: '.inner-repeater' }] });
+    this.$innerAddButton.click();
+
+    assert.strictEqual(
+        this.$innerRepeater.find('[data-repeater-item]').length,
+        2, 'adds item to inner repeater'
+    );
+
+    var $items = this.$outerRepeater.find('[data-repeater-list="outer-group"] > [data-repeater-item]');
+
+    assert.strictEqual($items.length, 1, 'does not add item to outer list');
+
+    assert.deepEqual(
+        getNamedInputValues($items.first()),
+        {
+            "outer-group[0][text-input]": "A",
+            "outer-group[0][inner-group][0][inner-text-input]": "B",
+            "outer-group[0][inner-group][1][inner-text-input]": "",
+        },
+        'renamed items'
+    );
 });
