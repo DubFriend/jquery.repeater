@@ -171,6 +171,9 @@ $.fn.repeater = function (fig) {
         var addItem = function () {
             var $item = $itemTemplate.clone();
             appendItem($item);
+            if(fig.repeaters) {
+                initNested($item);
+            }
             show.call($item.get(0));
         };
 
