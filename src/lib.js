@@ -10,6 +10,10 @@ var isObject = function (value) {
     return !isArray(value) && (value instanceof Object);
 };
 
+var isNumber = function (value) {
+    return value instanceof Number;
+};
+
 var isFunction = function (value) {
     return value instanceof Function;
 };
@@ -30,8 +34,23 @@ var foreach = function (collection, callback) {
     }
 };
 
+
 var last = function (array) {
     return array[array.length - 1];
+};
+
+var argumentsToArray = function (args) {
+    return Array.prototype.slice.call(args);
+};
+
+var extend = function () {
+    var extended = {};
+    foreach(argumentsToArray(arguments), function (o) {
+        foreach(o, function (val, key) {
+            extended[key] = val;
+        });
+    });
+    return extended;
 };
 
 var mapToArray = function (collection, callback) {
@@ -55,6 +74,12 @@ var map = function (collection, callback, keyCallback) {
     return isArray(collection) ?
         mapToArray(collection, callback) :
         mapToObject(collection, callback, keyCallback);
+};
+
+var pluck = function (arrayOfObjects, key) {
+    return map(arrayOfObjects, function (val) {
+        return val[key];
+    });
 };
 
 var filter = function (collection, callback) {

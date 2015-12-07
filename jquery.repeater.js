@@ -1,4 +1,4 @@
-// jquery.repeater version 1.1.2
+// jquery.repeater version 1.1.3
 // https://github.com/DubFriend/jquery.repeater
 // (MIT) 06-12-2015
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
@@ -15,6 +15,10 @@ var isArray = function (value) {
 
 var isObject = function (value) {
     return !isArray(value) && (value instanceof Object);
+};
+
+var isNumber = function (value) {
+    return value instanceof Number;
 };
 
 var isFunction = function (value) {
@@ -37,8 +41,23 @@ var foreach = function (collection, callback) {
     }
 };
 
+
 var last = function (array) {
     return array[array.length - 1];
+};
+
+var argumentsToArray = function (args) {
+    return Array.prototype.slice.call(args);
+};
+
+var extend = function () {
+    var extended = {};
+    foreach(argumentsToArray(arguments), function (o) {
+        foreach(o, function (val, key) {
+            extended[key] = val;
+        });
+    });
+    return extended;
 };
 
 var mapToArray = function (collection, callback) {
@@ -62,6 +81,12 @@ var map = function (collection, callback, keyCallback) {
     return isArray(collection) ?
         mapToArray(collection, callback) :
         mapToObject(collection, callback, keyCallback);
+};
+
+var pluck = function (arrayOfObjects, key) {
+    return map(arrayOfObjects, function (val) {
+        return val[key];
+    });
 };
 
 var filter = function (collection, callback) {
@@ -135,6 +160,7 @@ var mixinPubSub = function (object) {
 
     return object;
 };
+
 // jquery.input version 0.0.0
 // https://github.com/DubFriend/jquery.input
 // (MIT) 09-04-2014
@@ -698,33 +724,77 @@ $.fn.inputClear = function () {
 }(jQuery));
 
 $.fn.repeaterVal = function () {
-    var rawData = $(this).inputVal();
-    var mapped = {};
+    var parse = function (raw) {
+        var parsed = [];
 
-    foreach(rawData, function (val, key) {
-        var group, index, name;
-        var matches;
-        if(key !== "undefined") {
-            matches = key.match(/^([^\[]+)\[([0-9]+)\]\[([^\]]+)/);
-            group = matches[1];
-            index = matches[2];
-            name = matches[3];
-            if(!mapped[group]) {
-                mapped[group] = [];
+        foreach(raw, function (val, key) {
+            var parsedKey = [];
+            if(key !== "undefined") {
+                parsedKey.push(key.match(/^[^\[]*/)[0]);
+                parsedKey = parsedKey.concat(map(
+                    key.match(/\[[^\]]*\]/g),
+                    function (bracketed) {
+                        return bracketed.replace(/[\[\]]/g, '');
+                    }
+                ));
+
+                parsed.push({
+                    val: val,
+                    key: parsedKey
+                });
             }
+        });
 
-            if(!mapped[group][index]) {
-                mapped[group][index] = {};
-            }
+        return parsed;
+    };
 
-            mapped[group][index][name] = val;
+    var build = function (parsed) {
+        if(
+            parsed.length === 1 &&
+            (parsed[0].key.length === 0 || parsed[0].key.length === 1 && !parsed[0].key[0])
+        ) {
+            return parsed[0].val;
         }
-    });
 
-    return mapped;
+        foreach(parsed, function (p) {
+            p.head = p.key.shift();
+        });
+
+        var grouped = (function () {
+            var grouped = {};
+
+            foreach(parsed, function (p) {
+                if(!grouped[p.head]) {
+                    grouped[p.head] = [];
+                }
+                grouped[p.head].push(p);
+            });
+
+            return grouped;
+        }());
+
+        var built;
+
+        if(/^[0-9]+$/.test(parsed[0].head)) {
+            built = [];
+            foreach(grouped, function (group) {
+                built.push(build(group));
+            });
+        }
+        else {
+            built = {};
+            foreach(grouped, function (group, key) {
+                built[key] = build(group);
+            });
+        }
+
+        return built;
+    };
+
+    return build(parse($(this).inputVal()));
 };
 
-$.fn.repeater = function(fig) {
+$.fn.repeater = function (fig) {
     fig = fig || {};
 
     $(this).each(function () {
@@ -739,36 +809,89 @@ $.fn.repeater = function(fig) {
             removeElement();
         };
 
-        var $list = $self.find('[data-repeater-list]');
+        var $list = $self.find('[data-repeater-list]').first();
+
+        var $filterNested = function ($items, repeaters) {
+            return $items.filter(function () {
+                return repeaters ?
+                    $(this).closest(
+                        pluck(repeaters, 'selector').join(',')
+                    ).length === 0 : true;
+            });
+        };
+
+        var $items = function () {
+            return $filterNested($list.find('[data-repeater-item]'), fig.repeaters);
+        };
 
         var $itemTemplate = $list.find('[data-repeater-item]')
-                .first().clone().hide();
+                                 .first().clone().hide();
 
-        var $firstDeleteButton = $(this).find('[data-repeater-item]')
-                                        .first()
+        var $firstDeleteButton = $(this).find('[data-repeater-item]').first()
                                         .find('[data-repeater-delete]');
 
         if(fig.isFirstItemUndeletable && $firstDeleteButton) {
             $firstDeleteButton.remove();
         }
 
-        var groupName = $list.data('repeater-list');
+        var getGroupName = function () {
+            var groupName = $list.data('repeater-list');
+            return fig.$parent ?
+                fig.$parent.data('item-name') + '[' + groupName + ']' :
+                groupName;
+        };
 
-        var setIndexes = function () {
-            $list.find('[data-repeater-item]').each(function (index) {
-                $(this).find('[name]').each(function () {
+        var initNested = function ($listItems) {
+            if(fig.repeaters) {
+                $listItems.each(function () {
+                    var $item = $(this);
+                    foreach(fig.repeaters, function (nestedFig) {
+                        $item.find(nestedFig.selector).repeater(extend(
+                            nestedFig, { $parent: $item }
+                        ));
+                    });
+                });
+            }
+        };
+
+        var $foreachRepeaterInItem = function (repeaters, $item, cb) {
+            if(repeaters) {
+                foreach(repeaters, function (nestedFig) {
+                    cb.call($item.find(nestedFig.selector)[0], nestedFig);
+                });
+            }
+        };
+
+        var setIndexes = function ($items, groupName, repeaters) {
+            $items.each(function (index) {
+                var $item = $(this);
+                $item.data('item-name', groupName + '[' + index + ']');
+                $filterNested($item.find('[name]'), repeaters)
+                .each(function () {
+                    var $input = $(this);
                     // match non empty brackets (ex: "[foo]")
-                    var matches = $(this).attr('name').match(/\[[^\]]+\]/g);
+                    var matches = $input.attr('name').match(/\[[^\]]+\]/g);
 
                     var name = matches ?
                         // strip "[" and "]" characters
                         last(matches).replace(/\[|\]/g, '') :
-                        $(this).attr('name');
+                        $input.attr('name');
+
 
                     var newName = groupName + '[' + index + '][' + name + ']' +
-                        ($(this).is(':checkbox') || $(this).attr('multiple') ? '[]' : '');
+                        ($input.is(':checkbox') || $input.attr('multiple') ? '[]' : '');
 
-                    $(this).attr('name', newName);
+                    $input.attr('name', newName);
+
+                    $foreachRepeaterInItem(repeaters, $item, function (nestedFig) {
+                        var $repeater = $(this);
+                        setIndexes(
+                            $filterNested($repeater.find('[data-repeater-item]'), nestedFig.repeaters || []),
+                            groupName + '[' + index + ']' +
+                                        '[' + $repeater.find('[data-repeater-list]').first().data('repeater-list') + ']',
+                            nestedFig.repeaters
+                        );
+                    });
                 });
             });
 
@@ -777,59 +900,87 @@ $.fn.repeater = function(fig) {
                 .prop('checked', true);
         };
 
-        setIndexes();
+        setIndexes($items(), getGroupName(), fig.repeaters);
+        initNested($items());
 
         if(fig.ready) {
-            fig.ready(setIndexes);
+            fig.ready(function () {
+                setIndexes($items(), getGroupName(), fig.repeaters);
+            });
         }
 
-        var setItemsValues = function ($item, values) {
-            var index;
-            index = $item.find('[name]').first()
-                .attr('name').match(/\[([0-9]*)\]/)[1];
 
-            $item.inputVal(map(values, identity, function (name) {
-                var nameIfNotCheckbox = groupName + '[' + index + '][' + name + ']';
-                return $item.find('[name="' + nameIfNotCheckbox + '"]').length ?
-                    nameIfNotCheckbox : nameIfNotCheckbox + '[]';
-            }));
-        };
 
         var appendItem = (function () {
-            var setupTemplate = function ($item) {
-                var defaultValues = fig.defaultValues;
+            var setItemsValues = function ($item, values, repeaters) {
+                if(values) {
+                    var inputNames = {};
+                    $filterNested($item.find('[name]'), repeaters).each(function () {
+                        var key = $(this).attr('name').match(/\[([^\]]*)(\]|\]\[\])$/)[1];
+                        inputNames[key] = $(this).attr('name');
+                    });
 
-                $item.find('[name]').each(function () {
-                    $(this).inputClear();
-                });
-
-                if(defaultValues) {
-                    setItemsValues($item, defaultValues);
+                    $item.inputVal(map(values, identity, function (name) {
+                        return inputNames[name];
+                    }));
                 }
+
+                $foreachRepeaterInItem(repeaters, $item, function (nestedFig) {
+                    var $repeater = $(this);
+                    $filterNested(
+                        $repeater.find('[data-repeater-item]'),
+                        nestedFig.repeaters
+                    )
+                    .each(function () {
+                        setItemsValues(
+                            $(this),
+                            nestedFig.defaultValues,
+                            nestedFig.repeaters || []
+                        );
+                    });
+                });
             };
 
             return function ($item) {
                 $list.append($item);
-                setIndexes();
-                setupTemplate($item);
+                setIndexes($items(), getGroupName(), fig.repeaters);
+                $item.find('[name]').each(function () {
+                    $(this).inputClear();
+                });
+                setItemsValues($item, fig.defaultValues, fig.repeaters);
             };
         }());
 
-        $self.find('[data-repeater-create]').click(function () {
+        var addItem = function () {
             var $item = $itemTemplate.clone();
             appendItem($item);
+            if(fig.repeaters) {
+                initNested($item);
+            }
             show.call($item.get(0));
+        };
+
+        $self.children().each(function () {
+            if(
+                !$(this).is('[data-repeater-list]') &&
+                $(this).find('[data-repeater-list]').length === 0
+            ) {
+                if($(this).is('[data-repeater-create]')) {
+                    $(this).click(addItem);
+                }
+                else if($(this).find('[data-repeater-create]').length !== 0) {
+                    $(this).find('[data-repeater-create]').click(addItem);
+                }
+            }
         });
 
         $list.on('click', '[data-repeater-delete]', function () {
             var self = $(this).closest('[data-repeater-item]').get(0);
             hide.call(self, function () {
                 $(self).remove();
-                setIndexes();
+                setIndexes($items(), getGroupName(), fig.repeaters);
             });
         });
-
-
     });
 
     return this;
