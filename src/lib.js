@@ -10,6 +10,10 @@ var isObject = function (value) {
     return !isArray(value) && (value instanceof Object);
 };
 
+var isNumber = function (value) {
+    return value instanceof Number;
+};
+
 var isFunction = function (value) {
     return value instanceof Function;
 };
@@ -29,6 +33,7 @@ var foreach = function (collection, callback) {
         }
     }
 };
+
 
 var last = function (array) {
     return array[array.length - 1];

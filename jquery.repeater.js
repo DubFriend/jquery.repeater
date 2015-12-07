@@ -1,6 +1,6 @@
 // jquery.repeater version 1.1.2
 // https://github.com/DubFriend/jquery.repeater
-// (MIT) 05-12-2015
+// (MIT) 06-12-2015
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 (function ($) {
 'use strict';
@@ -15,6 +15,10 @@ var isArray = function (value) {
 
 var isObject = function (value) {
     return !isArray(value) && (value instanceof Object);
+};
+
+var isNumber = function (value) {
+    return value instanceof Number;
 };
 
 var isFunction = function (value) {
@@ -36,6 +40,7 @@ var foreach = function (collection, callback) {
         }
     }
 };
+
 
 var last = function (array) {
     return array[array.length - 1];
@@ -719,30 +724,74 @@ $.fn.inputClear = function () {
 }(jQuery));
 
 $.fn.repeaterVal = function () {
-    var rawData = $(this).inputVal();
-    var mapped = {};
+    var parse = function (raw) {
+        var parsed = [];
 
-    foreach(rawData, function (val, key) {
-        var group, index, name;
-        var matches;
-        if(key !== "undefined") {
-            matches = key.match(/^([^\[]+)\[([0-9]+)\]\[([^\]]+)/);
-            group = matches[1];
-            index = matches[2];
-            name = matches[3];
-            if(!mapped[group]) {
-                mapped[group] = [];
+        foreach(raw, function (val, key) {
+            var parsedKey = [];
+            if(key !== "undefined") {
+                parsedKey.push(key.match(/^[^\[]*/)[0]);
+                parsedKey = parsedKey.concat(map(
+                    key.match(/\[[^\]]*\]/g),
+                    function (bracketed) {
+                        return bracketed.replace(/[\[\]]/g, '');
+                    }
+                ));
+
+                parsed.push({
+                    val: val,
+                    key: parsedKey
+                });
             }
+        });
 
-            if(!mapped[group][index]) {
-                mapped[group][index] = {};
-            }
+        return parsed;
+    };
 
-            mapped[group][index][name] = val;
+    var build = function (parsed) {
+        if(
+            parsed.length === 1 &&
+            (parsed[0].key.length === 0 || parsed[0].key.length === 1 && !parsed[0].key[0])
+        ) {
+            return parsed[0].val;
         }
-    });
 
-    return mapped;
+        foreach(parsed, function (p) {
+            p.head = p.key.shift();
+        });
+
+        var grouped = (function () {
+            var grouped = {};
+
+            foreach(parsed, function (p) {
+                if(!grouped[p.head]) {
+                    grouped[p.head] = [];
+                }
+                grouped[p.head].push(p);
+            });
+
+            return grouped;
+        }());
+
+        var built;
+
+        if(/^[0-9]+$/.test(parsed[0].head)) {
+            built = [];
+            foreach(grouped, function (group) {
+                built.push(build(group));
+            });
+        }
+        else {
+            built = {};
+            foreach(grouped, function (group, key) {
+                built[key] = build(group);
+            });
+        }
+
+        return built;
+    };
+
+    return build(parse($(this).inputVal()));
 };
 
 $.fn.repeater = function (fig) {

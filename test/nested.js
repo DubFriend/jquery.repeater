@@ -223,8 +223,12 @@ QUnit.test('nested default values last item', function (assert) {
 });
 
 QUnit.test('repeaterVal nested', function (assert) {
+    this.$outerRepeater.repeater({
+        repeaters: [{ selector: '.inner-repeater' }]
+    });
+
     assert.deepEqual(this.$outerRepeater.repeaterVal(), {
-        'outer-group': [{ 
+        'outer-group': [{
             'text-input': 'A',
             'inner-group': [{ 'inner-text-input': 'B' }]
         }]
