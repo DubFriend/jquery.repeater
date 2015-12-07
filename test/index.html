@@ -10,8 +10,7 @@
   <div id="qunit-fixture"></div>
 
   <script type="text/x-template" id="template">
-
-    <form action="echo.php" class="repeater">
+    <form action="echo.php" class="repeater" enctype="multipart/form-data">
       <div data-repeater-list="group-a">
         <div data-repeater-item>
           <input name="untyped-input" value="A"/>
@@ -71,7 +70,27 @@
       <input data-repeater-create type="button" value="Add"/>
     </form>
     
-
+    <form action="echo.php" class="outer-repeater">
+      <div data-repeater-list="outer-group">
+        <div data-repeater-item>
+          <input type="text" name="text-input" value="A"/>
+          <input data-repeater-delete type="button" value="Delete"/>
+    
+          <div class="inner-repeater">
+            <div data-repeater-list="inner-group">
+              <div data-repeater-item>
+                <input type="text" name="inner-text-input" value="B"/>
+                <input data-repeater-delete type="button" value="Delete"/>
+              </div>
+            </div>
+            <input data-repeater-create type="button" value="Add"/>
+          </div>
+    
+        </div>
+      </div>
+      <input data-repeater-create type="button" value="Add"/>
+    </form>
+    
   </script>
 
   <script src="../jquery-1.11.1.js"></script>
@@ -79,6 +98,8 @@
   <script src="../src/lib.js"></script>
   <script src="../src/repeater.js"></script>
   <script src="qunit-1.14.0.js"></script>
+  <script src="test-lib.js"></script>
   <script src="test.js"></script>
+  <script src="nested.js"></script>
 </body>
 </html>
