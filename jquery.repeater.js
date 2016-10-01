@@ -1,6 +1,6 @@
-// jquery.repeater version 1.1.3
+// jquery.repeater version 1.1.4
 // https://github.com/DubFriend/jquery.repeater
-// (MIT) 06-12-2015
+// (MIT) 01-10-2016
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 (function ($) {
 'use strict';
@@ -960,19 +960,7 @@ $.fn.repeater = function (fig) {
             show.call($item.get(0));
         };
 
-        $self.children().each(function () {
-            if(
-                !$(this).is('[data-repeater-list]') &&
-                $(this).find('[data-repeater-list]').length === 0
-            ) {
-                if($(this).is('[data-repeater-create]')) {
-                    $(this).click(addItem);
-                }
-                else if($(this).find('[data-repeater-create]').length !== 0) {
-                    $(this).find('[data-repeater-create]').click(addItem);
-                }
-            }
-        });
+        $filterNested($self.find('[data-repeater-create]'), fig.repeaters).click(addItem);
 
         $list.on('click', '[data-repeater-delete]', function () {
             var self = $(this).closest('[data-repeater-item]').get(0);
