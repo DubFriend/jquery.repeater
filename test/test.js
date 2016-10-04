@@ -42,6 +42,38 @@ QUnit.test('add item', function (assert) {
     );
 });
 
+QUnit.test('instantiate with no first item', function (assert) {
+    this.$repeater.find('[data-repeater-item]').last().remove();
+    this.$repeater.find('[data-repeater-item]').css('display', 'none');
+    assert.strictEqual(
+        this.$repeater.find('[data-repeater-item]').css('display'), 'none',
+        'display:none css is set'
+    );
+    this.$repeater.repeater({ initEmpty: true });
+    assert.strictEqual(
+        this.$repeater.find('[data-repeater-item]').length, 0,
+        'starts with no items'
+    );
+    this.$addButton.click();
+    assert.strictEqual(
+        this.$repeater.find('[data-repeater-item]').length, 1,
+        'still able to create item'
+    );
+
+    assert.strictEqual(
+        this.$repeater.find('[data-repeater-item]').css('display'), 'block',
+        'display:none css is not set'
+    );
+
+    assert.deepEqual(
+        getNamedInputValues(this.$repeater.find('[data-repeater-item]')),
+        generateNameMappedInputValues('a', 0, '', {
+            "group-a[0][multiple-select-input][]": []
+        }),
+        'maintains template'
+    );
+});
+
 QUnit.test('instantiate group of repeaters with a single repeater() call', function (assert) {
     this.$fixture.find('.repeater').repeater();
     this.$addButton.click();

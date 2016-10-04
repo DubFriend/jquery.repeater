@@ -48,14 +48,19 @@ Names get reindexed if an item is added or deleted.
 <script src="path/to/jquery.js"></script>
 <script src="path/to/jquery.repeater/jquery.repeater.js"></script>
 <script>
-	$(document).ready(function () {
-		$('.repeater').repeater({
-			// (Optional)
-			// "defaultValues" sets the values of added items.  The keys of
+    $(document).ready(function () {
+        $('.repeater').repeater({
+            // (Optional)
+            // start with an empty list of repeaters. Set your first (and only)
+            // "data-repeater-item" with style="display:none;" and pass the
+            // following configuration flag
+            initEmpty: true,
+            // (Optional)
+            // "defaultValues" sets the values of added items.  The keys of
             // defaultValues refer to the value of the input's name attribute.
             // If a default value is not specified for an input, then it will
             // have its value cleared.
-			defaultValues: {
+            defaultValues: {
                 'text-input': 'foo'
             },
             // (Optional)
@@ -88,8 +93,8 @@ Names get reindexed if an item is added or deleted.
             // Removes the delete button from the first list item,
             // defaults to false.
             isFirstItemUndeletable: true
-		})
-	});
+        })
+    });
 </script>
 ```
 
@@ -122,20 +127,20 @@ Names get reindexed if an item is added or deleted.
 <script src="path/to/jquery.js"></script>
 <script src="path/to/jquery.repeater/jquery.repeater.js"></script>
 <script>
-	$(document).ready(function () {
-		$('.repeater').repeater({
-			// (Required if there is a nested repeater)
+    $(document).ready(function () {
+        $('.repeater').repeater({
+            // (Required if there is a nested repeater)
             // Specify the configuration of the nested repeaters.
             // Nested configuration follows the same format as the base configuration,
             // supporting options "defaultValues", "show", "hide", etc.
             // Nested repeaters additionally require a "selector" field.
-			repeaters: [{
+            repeaters: [{
                 // (Required)
                 // Specify the jQuery selector for this nested repeater
                 selector: '.inner-repeater'
             }]
-		});
-	});
+        });
+    });
 </script>
 ```
 
