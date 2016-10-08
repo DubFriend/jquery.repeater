@@ -140,43 +140,7 @@ $.fn.repeater = function (fig) {
             }
         };
 
-        var setIndexes = function ($items, groupName, repeaters) {
-            $items.each(function (index) {
-                var $item = $(this);
-                $item.data('item-name', groupName + '[' + index + ']');
-                $filterNested($item.find('[name]'), repeaters)
-                .each(function () {
-                    var $input = $(this);
-                    // match non empty brackets (ex: "[foo]")
-                    var matches = $input.attr('name').match(/\[[^\]]+\]/g);
-
-                    var name = matches ?
-                        // strip "[" and "]" characters
-                        last(matches).replace(/\[|\]/g, '') :
-                        $input.attr('name');
-
-
-                    var newName = groupName + '[' + index + '][' + name + ']' +
-                        ($input.is(':checkbox') || $input.attr('multiple') ? '[]' : '');
-
-                    $input.attr('name', newName);
-
-                    $foreachRepeaterInItem(repeaters, $item, function (nestedFig) {
-                        var $repeater = $(this);
-                        setIndexes(
-                            $filterNested($repeater.find('[data-repeater-item]'), nestedFig.repeaters || []),
-                            groupName + '[' + index + ']' +
-                                        '[' + $repeater.find('[data-repeater-list]').first().data('repeater-list') + ']',
-                            nestedFig.repeaters
-                        );
-                    });
-                });
-            });
-
-            $list.find('input[name][checked]')
-                .removeAttr('checked')
-                .prop('checked', true);
-        };
+        
 
         setIndexes($items(), getGroupName(), fig.repeaters);
         initNested($items());
@@ -190,7 +154,50 @@ $.fn.repeater = function (fig) {
             });
         }
 
+        var setIndexes = function ($items, groupName, repeaters) {
+                $items.each(function (index) {
+                    var $item = $(this);
+                    var subjects = $.merge($item.find('[name]'), $item.find('label'));
+                    $item.data('item-name', groupName + '[' + index + ']');
 
+                    $filterNested(subjects, repeaters)
+                        .each(function () {
+                            var $input = $(this);
+                            var name = $input.is('label') ? $input.attr('for') : $input.attr('name');
+
+                            // match non empty brackets (ex: "[foo]")
+                            var matches = name.match(/\[[^\]]+\]/g);
+
+                            name = matches ?
+                                // strip "[" and "]" characters
+                                last(matches).replace(/\[|\]/g, '') :
+                                name;
+
+                            var newName = groupName + '[' + index + '][' + name + ']' +
+                                ($input.is(':checkbox') || $input.attr('multiple') ? '[]' : '');
+
+                            if ($input.is('label')) {
+                                $input.attr('for', newName);
+                            } else {
+                                $input.attr('name', newName);
+                            }
+
+                            $foreachRepeaterInItem(repeaters, $item, function (nestedFig) {
+                                var $repeater = $(this);
+                                setIndexes(
+                                    $filterNested($repeater.find('[data-repeater-item]'), nestedFig.repeaters || []),
+                                    groupName + '[' + index + ']' +
+                                    '[' + $repeater.find('[data-repeater-list]').first().data('repeater-list') + ']',
+                                    nestedFig.repeaters
+                                );
+                            });
+                        });
+                });
+
+                $list.find('input[name][checked]')
+                    .removeAttr('checked')
+                    .prop('checked', true);
+            };
 
         var appendItem = (function () {
             var setItemsValues = function ($item, values, repeaters) {
