@@ -10,6 +10,70 @@ QUnit.module('nested-repeater', {
 });
 
 
+QUnit.test('isFirstItemUndeletable configuration option', function (assert) {
+    this.$outerRepeater.repeater({
+        isFirstItemUndeletable: true,
+        repeaters: [{
+            selector: '.inner-repeater',
+            isFirstItemUndeletable: true
+        }]
+    });
+
+    this.$outerAddButton.click();
+    this.$innerAddButton.click();
+
+    var $outerItems = this.$outerRepeater.find('[data-repeater-list="outer-group"] > [data-repeater-item]');
+    var $innerItems = this.$innerRepeater.find('[data-repeater-item]');
+
+    assert.strictEqual($outerItems.length, 2, 'adds a second item to outer list');
+    assert.strictEqual($innerItems.length, 2, 'adds a second item to inner list');
+    assert.strictEqual(
+        // this.$outerRepeater.find('[data-repeater-list="outer-group"] > [data-repeater-item]')
+        // .first().find('[data-repeater-delete]').length,
+        // this.$outerRepeater.find(
+        //     '[data-repeater-list="outer-group"] > [data-repeater-item] > [data-repeater-delete]'
+        // ).first().length,
+        this.$outerRepeater.find('[data-repeater-item].outer')
+        .first().find('[data-repeater-delete].outer').length,
+        0,
+        'No delete button on first outer item'
+    );
+
+    assert.strictEqual(
+        this.$outerRepeater.find('[data-repeater-item].outer')
+        .last().find('[data-repeater-delete].outer').length,
+        1,
+        'Delete button on second outer item'
+    );
+
+    assert.strictEqual(
+        this.$innerRepeater.find('[data-repeater-item]')
+        .first().find('[data-repeater-delete]').length,
+        0,
+        'No delete button on first inner item of first outer item'
+    );
+
+    assert.strictEqual(
+        this.$innerRepeater.find('[data-repeater-item]')
+        .last().find('[data-repeater-delete]').length,
+        1,
+        'Delete button on second inner item of first outer item'
+    );
+
+    assert.strictEqual(
+        this.$outerRepeater.find('[data-repeater-list="inner-group"]').last()
+        .find('[data-repeater-item]').first().find('[data-repeater-delete]').length,
+        0,
+        'No delete button on first inner item of second outer item'
+    );
+
+    // var $firstDeleteButton = this.$repeater.find('[data-repeater-item]')
+    //                                     .first().find('[data-repeater-delete]');
+
+
+    // assert.strictEqual($firstDeleteButton.length, 0, 'first delete button is removed');
+});
+
 QUnit.test('add item nested outer', function (assert) {
     this.$outerRepeater.repeater({ repeaters: [{ selector: '.inner-repeater' }] });
     this.$outerAddButton.click();

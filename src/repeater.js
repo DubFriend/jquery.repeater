@@ -102,12 +102,11 @@ $.fn.repeater = function (fig) {
         var $itemTemplate = $list.find('[data-repeater-item]')
                                  .first().clone().hide();
 
-        // if(fig.initEmpty) {
-        //     $itemTemplate.css('display', '');
-        // }
-
-        var $firstDeleteButton = $(this).find('[data-repeater-item]').first()
-                                        .find('[data-repeater-delete]');
+        var $firstDeleteButton = $filterNested(
+            $filterNested($(this).find('[data-repeater-item]'), fig.repeaters)
+            .first().find('[data-repeater-delete]'),
+            fig.repeaters
+        );
 
         if(fig.isFirstItemUndeletable && $firstDeleteButton) {
             $firstDeleteButton.remove();

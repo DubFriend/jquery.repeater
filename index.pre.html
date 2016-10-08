@@ -44,6 +44,7 @@
         });
 
         $('.outer-repeater').repeater({
+            isFirstItemUndeletable: true,
             defaultValues: { 'text-input': 'outer-default' },
             show: function () {
                 console.log('outer show');
@@ -54,6 +55,7 @@
                 $(this).slideUp(deleteElement);
             },
             repeaters: [{
+                isFirstItemUndeletable: true,
                 selector: '.inner-repeater',
                 defaultValues: { 'inner-text-input': 'inner-default' },
                 show: function () {
