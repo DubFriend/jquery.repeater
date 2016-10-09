@@ -28,11 +28,6 @@ QUnit.test('isFirstItemUndeletable configuration option', function (assert) {
     assert.strictEqual($outerItems.length, 2, 'adds a second item to outer list');
     assert.strictEqual($innerItems.length, 2, 'adds a second item to inner list');
     assert.strictEqual(
-        // this.$outerRepeater.find('[data-repeater-list="outer-group"] > [data-repeater-item]')
-        // .first().find('[data-repeater-delete]').length,
-        // this.$outerRepeater.find(
-        //     '[data-repeater-list="outer-group"] > [data-repeater-item] > [data-repeater-delete]'
-        // ).first().length,
         this.$outerRepeater.find('[data-repeater-item].outer')
         .first().find('[data-repeater-delete].outer').length,
         0,
@@ -66,12 +61,41 @@ QUnit.test('isFirstItemUndeletable configuration option', function (assert) {
         0,
         'No delete button on first inner item of second outer item'
     );
+});
 
-    // var $firstDeleteButton = this.$repeater.find('[data-repeater-item]')
-    //                                     .first().find('[data-repeater-delete]');
+QUnit.test('setList', function (assert) {
+    var repeater = this.$outerRepeater.repeater({
+        repeaters: [{ selector: '.inner-repeater' }]
+    });
+    repeater.setList([
+        {
+            'text-input': 'set-a',
+            'inner-group': [{ 'inner-text-input': 'set-b' }]
+        },
+        {
+            'text-input': 'set-foo',
+            'inner-group': []
+        }
+    ]);
 
+    var $items = this.$outerRepeater.find('[data-repeater-list="outer-group"] > [data-repeater-item]');
 
-    // assert.strictEqual($firstDeleteButton.length, 0, 'first delete button is removed');
+    assert.deepEqual(
+        getNamedInputValues($items.first()),
+        {
+            "outer-group[0][text-input]": "set-a",
+            "outer-group[0][inner-group][0][inner-text-input]": "set-b"
+        },
+        'set first item'
+    );
+
+    assert.deepEqual(
+        getNamedInputValues($items.last()),
+        {
+            "outer-group[1][text-input]": "set-foo"
+        },
+        'set second item'
+    );
 });
 
 QUnit.test('add item nested outer', function (assert) {

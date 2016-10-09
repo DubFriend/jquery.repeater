@@ -162,3 +162,18 @@ $('.repeater').repeater();
 //get the values of the inputs as a formatted object
 $('.repeater').repeaterVal();
 ```
+
+## setList
+
+You can set repeater list data after it has been initialized.
+
+```javascript
+var $repeater = $('.repeater').repeater();
+$repeater.setList([
+    {
+        'text-input': 'set-a',
+        'inner-group': [{ 'inner-text-input': 'set-b' }]
+    },
+    { 'text-input': 'set-foo' }
+]);
+```
