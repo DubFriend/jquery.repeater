@@ -1,4 +1,5 @@
 #Repeater
+[![CDNJS](https://img.shields.io/cdnjs/v/jquery.repeater.svg)](https://cdnjs.com/libraries/jquery.repeater)
 
 Creates an interface to add and remove a repeatable group of input elements.
 
