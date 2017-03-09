@@ -67,7 +67,7 @@ QUnit.test('setList', function (assert) {
     var repeater = this.$outerRepeater.repeater({
         repeaters: [{ selector: '.inner-repeater' }]
     });
-    repeater.setList([
+    repeater.repeater('setList', [
         {
             'text-input': 'set-a',
             'inner-group': [{ 'inner-text-input': 'set-b' }]

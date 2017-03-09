@@ -1,2 +1,2 @@
-(function ($) {
+;(function ($) {
 'use strict';
