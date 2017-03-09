@@ -169,8 +169,7 @@ $('.repeater').repeaterVal();
 You can set repeater list data after it has been initialized.
 
 ```javascript
-var $repeater = $('.repeater').repeater();
-$repeater.repeater('setList', [
+$('.repeater').repeater('setList', [
     {
         'text-input': 'set-a',
         'inner-group': [{ 'inner-text-input': 'set-b' }]
