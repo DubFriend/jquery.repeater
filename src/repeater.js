@@ -126,11 +126,14 @@ $.fn.repeater.API = {
     fig: function() {
         return this._container.data( 'repeater.fig' );
     },
+    clear: function() {
+        this.getItems().remove();
+    },
     setList: function (rows) {
         var fig = this.fig(),
             container = fig.container;
-
-        this.getItems().remove();
+	
+	this.clear();
         foreach(rows, function(data) {
             fig.API.addItem(data);
         });

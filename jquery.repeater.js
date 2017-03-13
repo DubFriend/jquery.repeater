@@ -1,6 +1,6 @@
 // jquery.repeater version 1.2.1
 // https://github.com/DubFriend/jquery.repeater
-// (MIT) 09-03-2017
+// (MIT) 13-03-2017
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 ;(function ($) {
 'use strict';
@@ -851,11 +851,14 @@ $.fn.repeater.API = {
     fig: function() {
         return this._container.data( 'repeater.fig' );
     },
+    clear: function() {
+        this.getItems().remove();
+    },
     setList: function (rows) {
         var fig = this.fig(),
             container = fig.container;
-
-        this.getItems().remove();
+	
+	this.clear();
         foreach(rows, function(data) {
             fig.API.addItem(data);
         });
@@ -1083,4 +1086,5 @@ $.fn.repeater.defaults = {
     },
     ready: null,
 }
+
 }(jQuery));

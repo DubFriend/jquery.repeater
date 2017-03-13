@@ -163,6 +163,14 @@ $('.repeater').repeater();
 //get the values of the inputs as a formatted object
 $('.repeater').repeaterVal();
 ```
+## clear
+
+You can reset a repeater by calling clear, this will remove all visible repeated items.
+```javascript
+$('form').on('reset', function() {
+    $('.repeater').repeater('clear');
+});
+```
 
 ## setList
 
