@@ -1,18 +1,18 @@
-#Repeater
+# Repeater
 [![CDNJS](https://img.shields.io/cdnjs/v/jquery.repeater.svg)](https://cdnjs.com/libraries/jquery.repeater)
 
 Creates an interface to add and remove a repeatable group of input elements.
 
-###[Demo](http://briandetering.net/repeater)
+### [Demo](http://briandetering.net/repeater)
 
 `bower install jquery.repeater --save`
 `npm install jquery.repeater --save`
 
-##Templates
+## Templates
 
 Repeater uses the first "data-repeater-item" as a template for added items.
 
-##Rewritten Name Attributes.
+## Rewritten Name Attributes.
 
 Repeater rewrites your name attributes to avoid collisions within the same form.
 (since the name attributes will be repeated).  In the example below, the
@@ -23,7 +23,7 @@ with name `foo` would be mapped to `group-a[0][foo][]`.
 
 Names get reindexed if an item is added or deleted.
 
-##Example
+## Example
 
 ```html
 <form class="repeater">
