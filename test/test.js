@@ -30,7 +30,8 @@ QUnit.test('add item', function (assert) {
     assert.deepEqual(
         getNamedInputValues($items.first()),
         generateNameMappedInputValues('a', 0, 'A', {
-            "group-a[0][multiple-select-input][]": ['A', 'B']
+            "group-a[0][multiple-select-input][]": ['A', 'B'],
+            "group-a[0][number-input]": '5'
         }),
         'does not clear other inputs'
     );
@@ -99,7 +100,8 @@ QUnit.test('second repeater add item', function (assert) {
     assert.deepEqual(
         getNamedInputValues($items.first()),
         generateNameMappedInputValues('b', 0, 'A', {
-            "group-b[0][multiple-select-input][]": ['A', 'B']
+            "group-b[0][multiple-select-input][]": ['A', 'B'],
+            "group-b[0][number-input]": '5'
         }),
         'does not clear other inputs'
     );
@@ -130,7 +132,8 @@ QUnit.test('multiple add buttons', function (assert) {
     assert.deepEqual(
         getNamedInputValues($items.first()),
         generateNameMappedInputValues('a', 0, 'A', {
-            "group-a[0][multiple-select-input][]": ['A', 'B']
+            "group-a[0][multiple-select-input][]": ['A', 'B'],
+            "group-a[0][number-input]": '5'
         }),
         'does not clear other inputs'
     );
@@ -165,7 +168,8 @@ QUnit.test('delete item', function (assert) {
     assert.deepEqual(
         getNamedInputValues(this.$repeater),
         generateNameMappedInputValues('a', 0, 'B', {
-            "group-a[0][multiple-select-input][]": ['A', 'B']
+            "group-a[0][multiple-select-input][]": ['A', 'B'],
+            "group-a[0][number-input]": '5'
         }),
         'second input remains and reindexed as first element'
     );
@@ -186,7 +190,8 @@ QUnit.test('delete item that has been added', function (assert) {
     assert.deepEqual(
         getNamedInputValues(this.$repeater.find('[data-repeater-item]').last()),
         generateNameMappedInputValues('a', 1, 'B', {
-            "group-a[1][multiple-select-input][]": ['A', 'B']
+            "group-a[1][multiple-select-input][]": ['A', 'B'],
+            "group-a[1][number-input]": '5'
         }),
         'second input remains'
     );
@@ -217,7 +222,8 @@ QUnit.asyncTest('custom hide callback', function (assert) {
             assert.deepEqual(
                 getNamedInputValues($(this)),
                 generateNameMappedInputValues('a', 0, 'A',{
-                    "group-a[0][multiple-select-input][]": ['A', 'B']
+                    "group-a[0][multiple-select-input][]": ['A', 'B'],
+                    "group-a[0][number-input]": '5'
                 }),
                 '"this" is set to first element'
             );
@@ -260,7 +266,7 @@ QUnit.asyncTest('has ready callback option and setIndexes', function (assert) {
             }).get();
 
             assert.strictEqual(indeces[0], '0');
-            assert.strictEqual(indeces[10], '1');
+            assert.strictEqual(indeces[11], '1');
 
             QUnit.start();
         }
@@ -274,6 +280,7 @@ QUnit.test('repeaterVal', function (assert) {
             {
                 "text-input": "A",
                 "textarea-input": "A",
+                "number-input": "5",
                 "select-input": "A",
                 "multiple-select-input": ["A", "B"],
                 "radio-input": "A",
@@ -282,6 +289,7 @@ QUnit.test('repeaterVal', function (assert) {
             {
                 "text-input": "B",
                 "textarea-input": "B",
+                "number-input": "5",
                 "select-input": "B",
                 "multiple-select-input": ["A", "B"],
                 "radio-input": "B",
