@@ -8,6 +8,7 @@ var generateNameMappedInputValues = function (group, index, defaultValue, overri
     var defaultObject = {};
     defaultObject['group-' + group + '[' + index + '][text-input]'] = defaultValue;
     defaultObject['group-' + group + '[' + index + '][textarea-input]'] = defaultValue;
+    defaultObject['group-' + group + '[' + index + '][number-input]'] = defaultValue;
     defaultObject['group-' + group + '[' + index + '][select-input]'] = defaultValue || null;
     defaultObject['group-' + group + '[' + index + '][radio-input]'] = defaultValue || null;
     defaultObject['group-' + group + '[' + index + '][checkbox-input][]'] = defaultValue ? [defaultValue] : [];

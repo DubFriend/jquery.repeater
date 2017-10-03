@@ -5,20 +5,20 @@
     <title>Repeater</title>
     <title>jquery.repeater</title>
     <style>
-    html, body {
-        font-family: Helvetica, Arial, sans-serif;
-        color: rgb(80, 80, 80);
-    }
+        html, body {
+            font-family: Helvetica, Arial, sans-serif;
+            color: rgb(80, 80, 80);
+        }
     </style>
 </head>
 <body>
-    <h2>Repeater</h2>
-    <!-- @include repeater.html -->
-    <h2>Nested</h2>
-    <!-- @include nested-repeater.html -->
-    <script src="jquery-1.11.1.js"></script>
-    <script src="jquery.repeater.js"></script>
-    <script>
+<h2>Repeater</h2>
+<!-- @include repeater.html -->
+<h2>Nested</h2>
+<!-- @include nested-repeater.html -->
+<script src="jquery-1.11.1.js"></script>
+<script src="jquery.repeater.js"></script>
+<script>
     $(document).ready(function () {
         'use strict';
 
@@ -26,6 +26,7 @@
             defaultValues: {
                 'textarea-input': 'foo',
                 'text-input': 'bar',
+                'number-input': '5',
                 'select-input': 'B',
                 'checkbox-input': ['A', 'B'],
                 'radio-input': 'B'
@@ -34,7 +35,7 @@
                 $(this).slideDown();
             },
             hide: function (deleteElement) {
-                if(confirm('Are you sure you want to delete this element?')) {
+                if (confirm('Are you sure you want to delete this element?')) {
                     $(this).slideUp(deleteElement);
                 }
             },
@@ -45,7 +46,7 @@
 
         window.outerRepeater = $('.outer-repeater').repeater({
             isFirstItemUndeletable: true,
-            defaultValues: { 'text-input': 'outer-default' },
+            defaultValues: {'text-input': 'outer-default'},
             show: function () {
                 console.log('outer show');
                 $(this).slideDown();
@@ -57,7 +58,7 @@
             repeaters: [{
                 isFirstItemUndeletable: true,
                 selector: '.inner-repeater',
-                defaultValues: { 'inner-text-input': 'inner-default' },
+                defaultValues: {'inner-text-input': 'inner-default'},
                 show: function () {
                     console.log('inner show');
                     $(this).slideDown();
@@ -69,6 +70,6 @@
             }]
         });
     });
-    </script>
+</script>
 </body>
 </html>
