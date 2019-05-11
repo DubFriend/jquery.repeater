@@ -262,7 +262,7 @@ $.fn.repeater = function (fig) {
             if(fig.repeaters) {
 				fig.repeaters.map(e => {
                     var key = e.selector.substring(1) // Convert selector to key only for class or id
-                    if (key in data) delete e.initEmpty	// Init empty on nested repeator cause the nested data can't be added
+                    if (data && key in data) delete e.initEmpty	// Init empty on nested repeator cause the nested data can't be added
                     else e.initEmpty = true
                 })
                 initNested($item);
