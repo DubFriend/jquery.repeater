@@ -260,6 +260,11 @@ $.fn.repeater = function (fig) {
             var $item = $itemTemplate.clone();
             appendItem($item, data);
             if(fig.repeaters) {
+				fig.repeaters.map(e => {
+                    var key = e.selector.substring(1) // Convert selector to key only for class or id
+                    if (data && key in data) delete e.initEmpty	// Init empty on nested repeator cause the nested data can't be added
+                    else e.initEmpty = true
+                })
                 initNested($item);
             }
             show.call($item.get(0));
