@@ -1,12 +1,14 @@
 # Repeater
-[![CDNJS](https://img.shields.io/cdnjs/v/jquery.repeater.svg)](https://cdnjs.com/libraries/jquery.repeater)
+[CDNJS](https://cdnjs.com/libraries/jquery.repeater)
 
 Creates an interface to add and remove a repeatable group of input elements.
 
 ### [Demo](http://briandetering.net/repeater)
 
-`bower install jquery.repeater --save`
-`npm install jquery.repeater --save`
+```
+bower install jquery.repeater --save
+npm install jquery.repeater --save
+```
 
 ## Templates
 
