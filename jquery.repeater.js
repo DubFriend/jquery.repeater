@@ -874,8 +874,15 @@ $.fn.repeater = function (fig) {
                 $filterNested($item.find('[name]'), repeaters)
                 .each(function () {
                     var $input = $(this);
-                    // match non empty brackets (ex: "[foo]")
-                    var matches = $input.attr('name').match(/[^\]\[]+/g);
+
+                    if (!$input.attr('data-oldName')) {
+                        var oldName = $input.attr('name');
+                        $input.attr('data-oldName', oldName);
+                    } else {
+                        var oldName = $input.attr('data-oldName');
+                    }
+
+                    var matches = oldName.match(/[^\]\[]+/g);
 
                     var newName = groupName + '[' + index + ']'
 
