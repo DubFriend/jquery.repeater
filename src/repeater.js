@@ -150,16 +150,17 @@ $.fn.repeater = function (fig) {
                 .each(function () {
                     var $input = $(this);
                     // match non empty brackets (ex: "[foo]")
-                    var matches = $input.attr('name').match(/\[[^\]]+\]/g);
+                    var matches = $input.attr('name').match(/[^\]\[]+/g);
 
-                    var name = matches ?
-                        // strip "[" and "]" characters
-                        last(matches).replace(/\[|\]/g, '') :
-                        $input.attr('name');
+                    var newName = groupName + '[' + index + ']'
 
+                    for (var i = 0; i < matches.length; i++) {
+                        newName += '[' + matches[i] + ']';
+                    }
 
-                    var newName = groupName + '[' + index + '][' + name + ']' +
-                        ($input.is(':checkbox') || $input.attr('multiple') ? '[]' : '');
+                    if ($input.is(':checkbox') || $input.attr('multiple')) {
+                        newName += '[]';
+                    }
 
                     $input.attr('name', newName);
 
