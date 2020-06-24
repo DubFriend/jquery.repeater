@@ -270,11 +270,11 @@ $.fn.repeater = function (fig) {
             foreach(rows, addItem);
         };
 
-        $filterNested($self.find('[data-repeater-create]'), fig.repeaters).click(function () {
+        $filterNested($self.find('[data-repeater-create]'), fig.repeaters).off().click(function () {
             addItem();
         });
 
-        $list.on('click', '[data-repeater-delete]', function () {
+        $list.off().on('click', '[data-repeater-delete]', function () {
             var self = $(this).closest('[data-repeater-item]').get(0);
             hide.call(self, function () {
                 $(self).remove();
