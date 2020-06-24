@@ -999,7 +999,7 @@ $.fn.repeater = function (fig) {
             addItem();
         });
 
-        $list.on('click', '[data-repeater-delete]', function () {
+        $list.off().on('click', '[data-repeater-delete]', function () {
             var self = $(this).closest('[data-repeater-item]').get(0);
             hide.call(self, function () {
                 $(self).remove();
