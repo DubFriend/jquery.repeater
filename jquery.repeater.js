@@ -1,6 +1,6 @@
 // jquery.repeater version 1.2.1
 // https://github.com/DubFriend/jquery.repeater
-// (MIT) 09-10-2016
+// (MIT) 24-06-2020
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 (function ($) {
 'use strict';
@@ -995,7 +995,7 @@ $.fn.repeater = function (fig) {
             foreach(rows, addItem);
         };
 
-        $filterNested($self.find('[data-repeater-create]'), fig.repeaters).click(function () {
+        $filterNested($self.find('[data-repeater-create]'), fig.repeaters).off().click(function () {
             addItem();
         });
 

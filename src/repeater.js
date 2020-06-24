@@ -270,7 +270,7 @@ $.fn.repeater = function (fig) {
             foreach(rows, addItem);
         };
 
-        $filterNested($self.find('[data-repeater-create]'), fig.repeaters).click(function () {
+        $filterNested($self.find('[data-repeater-create]'), fig.repeaters).off().click(function () {
             addItem();
         });
 
