@@ -531,6 +531,16 @@ var createInputURL = function (fig) {
 
     return self;
 };
+var createInputColor = function (fig) {
+    var my = {},
+        self = createInputText(fig, my);
+
+    self.getType = function () {
+        return 'color';
+    };
+
+    return self;
+};
 
 var buildFormInputs = function (fig) {
     var inputs = {},
@@ -540,6 +550,7 @@ var buildFormInputs = function (fig) {
         button: createInputButton,
         text: createInputText,
         url: createInputURL,
+        color: createInputColor,
         email: createInputEmail,
         password: createInputPassword,
         range: createInputRange,
@@ -612,6 +623,9 @@ var buildFormInputs = function (fig) {
         else if($self.is('input[type="url"]')) {
             addInputsBasic('url', $self);
         }
+        else if($self.is('input[type="color"]')) {
+            addInputsBasic('color', $self);
+        }
         else if($self.is('input[type="range"]')) {
             addInputsBasic('range', $self);
         }
@@ -651,6 +665,7 @@ var buildFormInputs = function (fig) {
         addInputsBasic('password', 'input[type="password"]');
         addInputsBasic('email', 'input[type="email"]');
         addInputsBasic('url', 'input[type="url"]');
+        addInputsBasic('color', 'input[type="color"]');
         addInputsBasic('range', 'input[type="range"]');
         addInputsBasic('textarea', 'textarea');
         addInputsBasic('select', 'select:not([multiple])');
