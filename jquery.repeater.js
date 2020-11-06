@@ -994,7 +994,13 @@ $.fn.repeater = function (fig) {
             $items().remove();
             foreach(rows, addItem);
         };
-
+        
+        restart = function () {
+            $list = $self.find('[data-repeater-list]').first()
+            $itemTemplate = $list.find('[data-repeater-item]')
+                .first().clone().hide();
+        };
+        
         $filterNested($self.find('[data-repeater-create]'), fig.repeaters).click(function () {
             addItem();
         });
@@ -1009,6 +1015,7 @@ $.fn.repeater = function (fig) {
     });
 
     this.setList = setList;
+    this.restart = restart;
 
     return this;
 };
