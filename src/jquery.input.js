@@ -70,6 +70,21 @@ var createInput = function (fig, my) {
     return self;
 };
 
+var createInputText = function (fig) {
+    var my = {},
+        self = createInput(fig, my);
+
+    self.getType = function () {
+        return 'text';
+    };
+
+    self.$().on('change keyup keydown', function (e) {
+        my.publishChange(e, this);
+    });
+
+    return self;
+};
+
 var inputEqualToArray = function (a, b) {
     a = isArray(a) ? a : [a];
     b = isArray(b) ? b : [b];
@@ -328,21 +343,6 @@ var createInputSelect = function (fig) {
     return self;
 };
 
-var createInputText = function (fig) {
-    var my = {},
-        self = createInput(fig, my);
-
-    self.getType = function () {
-        return 'text';
-    };
-
-    self.$().on('change keyup keydown', function (e) {
-        my.publishChange(e, this);
-    });
-
-    return self;
-};
-
 var createInputTextarea = function (fig) {
     var my = {},
         self = createInput(fig, my);
@@ -369,11 +369,119 @@ var createInputURL = function (fig) {
     return self;
 };
 
+var createInputColor = function(fig) {
+    var my = {},
+        self = createInputText(fig, my);
+
+    self.getType = function () {
+        return 'color';
+    };
+
+    return self;
+};
+
+var createInputDate = function(fig) {
+    var my = {},
+        self = createInputText(fig, my);
+
+    self.getType = function () {
+        return 'date';
+    };
+
+    return self;
+};
+
+var createInputDateTimeLocal = function(fig) {
+    var my = {},
+        self = createInputText(fig, my);
+
+    self.getType = function () {
+        return 'datetime-local';
+    };
+
+    return self;
+};
+
+var createInputMonth = function(fig) {
+    var my = {},
+        self = createInputText(fig, my);
+
+    self.getType = function () {
+        return 'month';
+    };
+
+    return self;
+};
+
+var createInputNumber = function(fig) {
+    var my = {},
+        self = createInputText(fig, my);
+
+    self.getType = function () {
+        return 'number';
+    };
+
+    return self;
+};
+
+var createInputSearch = function(fig) {
+    var my = {},
+        self = createInputText(fig, my);
+
+    self.getType = function () {
+        return 'search';
+    };
+
+    return self;
+};
+
+var createInputTel = function(fig) {
+    var my = {},
+        self = createInputText(fig, my);
+
+    self.getType = function () {
+        return 'tel';
+    };
+
+    return self;
+};
+
+var createInputTime = function(fig) {
+    var my = {},
+        self = createInputText(fig, my);
+
+    self.getType = function () {
+        return 'time';
+    };
+
+    return self;
+};
+
+var createInputWeek = function(fig) {
+    var my = {},
+        self = createInputText(fig, my);
+
+    self.getType = function () {
+        return 'week';
+    };
+
+    return self;
+};
+
+
 var buildFormInputs = function (fig) {
     var inputs = {},
         $self = fig.$;
-
     var constructor = fig.constructorOverride || {
+        color:createInputColor,
+        date:createInputDate,
+        datetimeLocal:createInputDateTimeLocal,
+        month:createInputMonth,
+        number:createInputNumber,
+        search:createInputSearch,
+        tel:createInputTel,
+        time:createInputTime,
+        week:createInputWeek,
         button: createInputButton,
         text: createInputText,
         url: createInputURL,
@@ -449,6 +557,33 @@ var buildFormInputs = function (fig) {
         else if($self.is('input[type="url"]')) {
             addInputsBasic('url', $self);
         }
+        else if($self.is('input[type="color"]')) {
+            addInputsBasic('color', $self);
+        }
+        else if($self.is('input[type="date"]')) {
+            addInputsBasic('date', $self);
+        }
+        else if($self.is('input[type="datetime-local"]')) {
+            addInputsBasic('datetimeLocal', $self);
+        }
+        else if($self.is('input[type="month"]')) {
+            addInputsBasic('month', $self);
+        }
+        else if($self.is('input[type="number"]')) {
+            addInputsBasic('number', $self);
+        }
+        else if($self.is('input[type="search"]')) {
+            addInputsBasic('search', $self);
+        }
+        else if($self.is('input[type="tel"]')) {
+            addInputsBasic('tel', $self);
+        }
+        else if($self.is('input[type="time"]')) {
+            addInputsBasic('time', $self);
+        }
+        else if($self.is('input[type="week"]')) {
+            addInputsBasic('week', $self);
+        }
         else if($self.is('input[type="range"]')) {
             addInputsBasic('range', $self);
         }
@@ -485,6 +620,15 @@ var buildFormInputs = function (fig) {
     else {
         addInputsBasic('button', 'input[type="button"], button, input[type="submit"]');
         addInputsBasic('text', 'input[type="text"]');
+        addInputsBasic('color', 'input[type="color"]');
+        addInputsBasic('date', 'input[type="date"]');
+        addInputsBasic('datetimeLocal', 'input[type="datetime-local"]');
+        addInputsBasic('month', 'input[type="month"]');
+        addInputsBasic('number', 'input[type="number"]');
+        addInputsBasic('search', 'input[type="search"]');
+        addInputsBasic('tel', 'input[type="tel"]');
+        addInputsBasic('time', 'input[type="time"]');
+        addInputsBasic('week', 'input[type="week"]');
         addInputsBasic('password', 'input[type="password"]');
         addInputsBasic('email', 'input[type="email"]');
         addInputsBasic('url', 'input[type="url"]');
