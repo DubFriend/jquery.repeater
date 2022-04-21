@@ -1018,17 +1018,25 @@ $.fn.repeater = function (fig) {
                 $filterNested($item.find('[name]'), repeaters)
                 .each(function () {
                     var $input = $(this);
-                    // match non empty brackets (ex: "[foo]")
-                    var matches = $input.attr('name').match(/\[[^\]]+\]/g);
 
-                    var name = matches ?
-                        // strip "[" and "]" characters
-                        last(matches).replace(/\[|\]/g, '') :
-                        $input.attr('name');
+                    if (!$input.attr('data-oldName')) {
+                        var oldName = $input.attr('name');
+                        $input.attr('data-oldName', oldName);
+                    } else {
+                        var oldName = $input.attr('data-oldName');
+                    }
 
+                    var matches = oldName.match(/[^\]\[]+/g);
 
-                    var newName = groupName + '[' + index + '][' + name + ']' +
-                        ($input.is(':checkbox') || $input.attr('multiple') ? '[]' : '');
+                    var newName = groupName + '[' + index + ']'
+
+                    for (var i = 0; i < matches.length; i++) {
+                        newName += '[' + matches[i] + ']';
+                    }
+
+                    if ($input.is(':checkbox') || $input.attr('multiple')) {
+                        newName += '[]';
+                    }
 
                     $input.attr('name', newName);
 
