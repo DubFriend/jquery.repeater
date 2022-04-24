@@ -1129,10 +1129,6 @@ $.fn.repeater = function (fig) {
             var $item = $itemTemplate.clone();
             appendItem($item, data);
 
-            if (fig.isFirstItemUndeletable && $item.find('[data-repeater-delete]').length === 1) {
-                $item.find('[data-repeater-delete]').remove();
-            }
-
             if(fig.repeaters) {
                 initNested($item);
             }
@@ -1142,6 +1138,14 @@ $.fn.repeater = function (fig) {
         setList = function (rows) {
             $items().remove();
             foreach(rows, addItem);
+
+            if (fig.isFirstItemUndeletable && $items().find('[data-repeater-delete]:first').length === 1) {
+                $items().find('[data-repeater-delete]:first').remove();
+            }
+
+            $filterNested($self.find('[data-repeater-create]'), fig.repeaters).click(function () {
+                addItem();
+            });
         };
 
         $filterNested($self.find('[data-repeater-create]'), fig.repeaters).click(function () {
