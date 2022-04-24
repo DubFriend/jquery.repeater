@@ -260,8 +260,9 @@ $.fn.repeater = function (fig) {
             var $item = $itemTemplate.clone();
             appendItem($item, data);
 
-            if (fig.isFirstItemUndeletable && $('[data-repeater-item]').length === 1)
+            if (fig.isFirstItemUndeletable && $item.find('[data-repeater-delete]').length === 1) {
                 $item.find('[data-repeater-delete]').remove();
+            }
 
             if(fig.repeaters) {
                 initNested($item);
