@@ -73,6 +73,7 @@ $.fn.repeater = function (fig) {
     fig = fig || {};
 
     var setList;
+    var addItem;
 
     $(this).each(function () {
 
@@ -256,7 +257,7 @@ $.fn.repeater = function (fig) {
             };
         }());
 
-        var addItem = function (data) {
+        addItem = function (data) {
             var $item = $itemTemplate.clone();
             appendItem($item, data);
             if(fig.repeaters) {
@@ -283,6 +284,7 @@ $.fn.repeater = function (fig) {
         });
     });
 
+    this.addItem = addItem;
     this.setList = setList;
 
     return this;
