@@ -893,9 +893,10 @@ $.fn.repeaterVal = function () {
     };
 
     var build = function (parsed) {
-        if(
+        if (
             parsed.length === 1 &&
-            (parsed[0].key.length === 0 || parsed[0].key.length === 1 && !parsed[0].key[0])
+            (parsed[0].key.length === 0 ||
+                (parsed[0].key.length === 1 && !parsed[0].key[0]))
         ) {
             return parsed[0].val;
         }
@@ -908,29 +909,31 @@ $.fn.repeaterVal = function () {
             var grouped = {};
 
             foreach(parsed, function (p) {
-                if(!grouped[p.head]) {
+                if (!grouped[p.head]) {
                     grouped[p.head] = [];
                 }
                 grouped[p.head].push(p);
             });
 
             return grouped;
-        }());
+        })();
 
         var built;
 
-        if(/^[0-9]+$/.test(parsed[0].head)) {
+        if (parsed.length > 0 && /^[0-9]+$/.test(parsed[0].head)) {
             built = [];
             foreach(grouped, function (group) {
                 built.push(build(group));
             });
-        }
-        else {
+        } else if (parsed.length === 0) {
+            built = false;
+        } else {
             built = {};
             foreach(grouped, function (group, key) {
                 built[key] = build(group);
             });
         }
+
 
         return built;
     };
