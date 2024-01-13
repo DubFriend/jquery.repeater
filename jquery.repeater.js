@@ -1,6 +1,6 @@
 // jquery.repeater version 1.2.2
 // https://github.com/DubFriend/jquery.repeater
-// (MIT) 15-04-2022
+// (MIT) 13-01-2024
 // Brian Detering <BDeterin@gmail.com> (http://www.briandetering.net/)
 (function ($) {
 'use strict';

@@ -178,3 +178,13 @@ $repeater.setList([
     { 'text-input': 'set-foo' }
 ]);
 ```
+
+## destroy
+
+You can set destroy the repeater.
+
+```javascript
+var $repeater = $('.repeater').repeater();
+$repeater.destroy();
+```
+```
