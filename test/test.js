@@ -30,7 +30,16 @@ QUnit.test('add item', function (assert) {
     assert.deepEqual(
         getNamedInputValues($items.first()),
         generateNameMappedInputValues('a', 0, 'A', {
-            "group-a[0][multiple-select-input][]": ['A', 'B']
+            "group-a[0][multiple-select-input][]": ['A', 'B'],
+            "group-a[0][color-input]":"#aaaaaa",
+            "group-a[0][date-input]":"2018-05-01",
+            "group-a[0][datetime-local-input]":"2018-05-12T19:30",
+            "group-a[0][month-input]":"2018-05",
+            "group-a[0][number-input]":"42",
+            "group-a[0][tel-input]":"1112223333",
+            "group-a[0][time-input]":"13:30",
+            "group-a[0][url-input]":"https://exemple.com/a",
+            "group-a[0][week-input]":"2018-W26",
         }),
         'does not clear other inputs'
     );
@@ -99,7 +108,16 @@ QUnit.test('second repeater add item', function (assert) {
     assert.deepEqual(
         getNamedInputValues($items.first()),
         generateNameMappedInputValues('b', 0, 'A', {
-            "group-b[0][multiple-select-input][]": ['A', 'B']
+            "group-b[0][multiple-select-input][]": ['A', 'B'],
+            "group-b[0][color-input]":"#aaaaaa",
+            "group-b[0][date-input]":"2018-05-01",
+            "group-b[0][datetime-local-input]":"2018-05-12T19:30",
+            "group-b[0][month-input]":"2018-05",
+            "group-b[0][number-input]":"42",
+            "group-b[0][tel-input]":"1112223333",
+            "group-b[0][time-input]":"13:30",
+            "group-b[0][url-input]":"https://exemple.com/a",
+            "group-b[0][week-input]":"2018-W26",
         }),
         'does not clear other inputs'
     );
@@ -130,7 +148,16 @@ QUnit.test('multiple add buttons', function (assert) {
     assert.deepEqual(
         getNamedInputValues($items.first()),
         generateNameMappedInputValues('a', 0, 'A', {
-            "group-a[0][multiple-select-input][]": ['A', 'B']
+            "group-a[0][multiple-select-input][]": ['A', 'B'],
+            "group-a[0][color-input]":"#aaaaaa",
+            "group-a[0][date-input]":"2018-05-01",
+            "group-a[0][datetime-local-input]":"2018-05-12T19:30",
+            "group-a[0][month-input]":"2018-05",
+            "group-a[0][number-input]":"42",
+            "group-a[0][tel-input]":"1112223333",
+            "group-a[0][time-input]":"13:30",
+            "group-a[0][url-input]":"https://exemple.com/a",
+            "group-a[0][week-input]":"2018-W26",
         }),
         'does not clear other inputs'
     );
@@ -165,7 +192,16 @@ QUnit.test('delete item', function (assert) {
     assert.deepEqual(
         getNamedInputValues(this.$repeater),
         generateNameMappedInputValues('a', 0, 'B', {
-            "group-a[0][multiple-select-input][]": ['A', 'B']
+            "group-a[0][multiple-select-input][]": ['A', 'B'],
+            "group-a[0][color-input]":"#bbbbbb",
+            "group-a[0][date-input]":"2019-05-01",
+            "group-a[0][datetime-local-input]":"2019-05-12T19:30",
+            "group-a[0][month-input]":"2019-05",
+            "group-a[0][number-input]":"43",
+            "group-a[0][tel-input]":"4442223333",
+            "group-a[0][time-input]":"14:30",
+            "group-a[0][url-input]":"https://exemple.com/b",
+            "group-a[0][week-input]":"2019-W26",
         }),
         'second input remains and reindexed as first element'
     );
@@ -186,7 +222,16 @@ QUnit.test('delete item that has been added', function (assert) {
     assert.deepEqual(
         getNamedInputValues(this.$repeater.find('[data-repeater-item]').last()),
         generateNameMappedInputValues('a', 1, 'B', {
-            "group-a[1][multiple-select-input][]": ['A', 'B']
+            "group-a[1][multiple-select-input][]": ['A', 'B'],
+            "group-a[1][color-input]":"#bbbbbb",
+            "group-a[1][date-input]":"2019-05-01",
+            "group-a[1][datetime-local-input]":"2019-05-12T19:30",
+            "group-a[1][month-input]":"2019-05",
+            "group-a[1][number-input]":"43",
+            "group-a[1][tel-input]":"4442223333",
+            "group-a[1][time-input]":"14:30",
+            "group-a[1][url-input]":"https://exemple.com/b",
+            "group-a[1][week-input]":"2019-W26",
         }),
         'second input remains'
     );
@@ -217,7 +262,16 @@ QUnit.asyncTest('custom hide callback', function (assert) {
             assert.deepEqual(
                 getNamedInputValues($(this)),
                 generateNameMappedInputValues('a', 0, 'A',{
-                    "group-a[0][multiple-select-input][]": ['A', 'B']
+                    "group-a[0][multiple-select-input][]": ['A', 'B'],
+                    "group-a[0][color-input]":"#aaaaaa",
+                    "group-a[0][date-input]":"2018-05-01",
+                    "group-a[0][datetime-local-input]":"2018-05-12T19:30",
+                    "group-a[0][month-input]":"2018-05",
+                    "group-a[0][number-input]":"42",
+                    "group-a[0][tel-input]":"1112223333",
+                    "group-a[0][time-input]":"13:30",
+                    "group-a[0][url-input]":"https://exemple.com/a",
+                    "group-a[0][week-input]":"2018-W26",
                 }),
                 '"this" is set to first element'
             );
@@ -260,7 +314,7 @@ QUnit.asyncTest('has ready callback option and setIndexes', function (assert) {
             }).get();
 
             assert.strictEqual(indeces[0], '0');
-            assert.strictEqual(indeces[10], '1');
+            assert.strictEqual(indeces[19], '1');
 
             QUnit.start();
         }
@@ -273,6 +327,16 @@ QUnit.test('repeaterVal', function (assert) {
         "group-a": [
             {
                 "text-input": "A",
+                "date-input": "2018-05-01",
+                "url-input": "https://exemple.com/a",
+                "color-input": "#aaaaaa",
+                "datetime-local-input": "2018-05-12T19:30",
+                "month-input": "2018-05",
+                "number-input": "42",
+                "search-input": "A",
+                "tel-input": "1112223333",
+                "time-input": "13:30",
+                "week-input": "2018-W26",
                 "textarea-input": "A",
                 "select-input": "A",
                 "multiple-select-input": ["A", "B"],
@@ -281,6 +345,16 @@ QUnit.test('repeaterVal', function (assert) {
             },
             {
                 "text-input": "B",
+                "date-input": "2019-05-01",
+                "url-input": "https://exemple.com/b",
+                "color-input": "#bbbbbb",
+                "datetime-local-input": "2019-05-12T19:30",
+                "month-input": "2019-05",
+                "number-input": "43",
+                "search-input": "B",
+                "tel-input": "4442223333",
+                "time-input": "14:30",
+                "week-input": "2019-W26",
                 "textarea-input": "B",
                 "select-input": "B",
                 "multiple-select-input": ["A", "B"],
